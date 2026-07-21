@@ -1,0 +1,9 @@
+Revisé qué datos reales tenemos en la caché y hay 3 señales que sí se pueden calcular ya mismo, sin scraping adicional:
+
+Concentración extrema — organismo+rubro donde un mismo RUT gana un % anormalmente alto de las licitaciones (ya tenemos parte de esto en "Quién te está ganando", solo falta el umbral de alerta).
+Reclamos — el campo CantidadReclamos existe en cada licitación y no lo estamos usando; licitaciones con reclamos altos son una señal real de que otros oferentes vieron algo irregular.
+Plazos de publicación muy cortos — comparar FechaPublicacion vs FechaCierre contra el promedio de ese tipo de licitación; plazos anormalmente cortos favorecen a quien ya sabía del proceso.
+Lo que no podemos detectar con los datos actuales: cuántos oferentes compitieron en cada proceso (la API solo entrega al ganador, no la lista de todos los que ofertaron) — así que "licitación con un solo oferente" no lo puedo confirmar directamente, solo inferirlo indirectamente por concentración histórica.
+
+¿Construyo una sección "🔎 Alertas de Mercado" con estas 3 señales, presentadas como "indicadores a revisar" (con explicación de cada una), o prefieres que primero te muestre un ejemplo con datos reales para que veas cómo se vería?
+

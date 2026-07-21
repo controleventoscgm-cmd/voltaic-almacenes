@@ -1,0 +1,80 @@
+[-] Error en safe_request para DIRECTO: Failed to parse: 'centrointegraldeatencionapoyoalaneurodivergenciayneurodesarrollo.cl', label empty or too long
+[-] Error en safe_request para DIRECTO: Failed to parse: 'www.centrointegraldeatencionapoyoalaneurodivergenciayneurodesarrollo.com', label empty or too long
+[-] Error en safe_request para DIRECTO: Failed to parse: 'centrointegraldeatencionapoyoalaneurodivergenciayneurodesarrollo.com', label empty or too long
+[-] [ANTI-BLOQUEO] Motor BING bloqueado temporalmente. Restan 55 min. Saltando...
+[PROGRESO: 99%]  Enriqueciendo... [210/213] SERVICIOS PHOENIX SPA
+[*] [Directo] Dominio sugerido inactivo o no registrado: https://www.bahner.cl
+[*] [Directo] Dominio sugerido inactivo o no registrado: https://bahner.cl
+[-] Error en safe_request para DIRECTO: HTTPSConnectionPool(host='www.bahner.com', port=443): Max retries exceeded with url: / (Caused by SSLError(SSLCertVerificationError(1, "[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'www.bahner.com'. (_ssl.c:1006)")))
+[*] [Directo] Dominio sugerido inactivo o no registrado: https://www.selemandavidhizmeritassara.cl
+[*] [Directo] Dominio sugerido inactivo o no registrado: https://selemandavidhizmeritassara.cl
+[*] [Directo] Dominio sugerido inactivo o no registrado: https://www.selemandavidhizmeritassara.com
+[*] [Directo] Dominio sugerido inactivo o no registrado: https://selemandavidhizmeritassara.com
+[-] [ANTI-BLOQUEO] Motor BING bloqueado temporalmente. Restan 48 min. Saltando...
+============================================================
+⚠️ [ANTI-BLOQUEO] ¡CAPTCHA o Error 429 detectado en motor YANDEX!
+Bloqueando búsquedas en este motor por 1 hora para proteger tu IP.
+============================================================
+[PROGRESO: 100%]  Enriqueciendo... [213/213] COMERCIAL ARRIMOT LIMITADA
+[*] [Directo] Dominio sugerido inactivo o no registrado: https://www.comercialarrimot.cl
+[*] [Directo] Dominio sugerido inactivo o no registrado: https://comercialarrimot.cl
+[*] [Directo] Dominio sugerido inactivo o no registrado: https://www.comercialarrimot.com
+[*] [Directo] Dominio sugerido inactivo o no registrado: https://comercialarrimot.com
+[-] [ANTI-BLOQUEO] Motor BING bloqueado temporalmente. Restan 46 min. Saltando...
+[-] [ANTI-BLOQUEO] Motor YANDEX bloqueado temporalmente. Restan 57 min. Saltando...
+05:32:34 [92m[OK][0m JSON: prospectos_data.json
+05:32:34 [92m[OK][0m CSV Top 100: prospectos_top.csv
+[PROGRESO: 100%]
+
+[92m[1m======================================================================[0m
+[92m[1m  TOP 10 EMPRESAS GANADORAS[0m
+[92m[1m======================================================================[0m
+
+  [1m 1.[0m SOC INSTALADORA MECANICA Y ELECTRICA LIM          
+      RUT: 87.602.100-5    [92m$2.700.000.000[0m en 1 licitaciones
+      Rubro: Consultoria / Consultoria / Planificación y Factibilidad
+
+  [1m 2.[0m INSTALACIONES ELECTRICAS PROYECTOS Y TELECOMUNICAC
+      RUT: 77.795.790-2    [92m$1.980.746.400[0m en 1 licitaciones
+      Rubro: Artículos eléctricos y de iluminación / Artefactos y accesorios d
+
+  [1m 3.[0m SOC INGENIERIA CONSTRUCCION Y MAQUINARIA SPA      
+      RUT: 79.730.570-7    [92m$1.482.648.497[0m en 1 licitaciones
+      Rubro: Consultoria / Consultoria / Planificación y Factibilidad
+
+  [1m 4.[0m EMPRESA CONSTRUCTORA AGORA LIMITADA               
+      RUT: 76.669.290-7    [92m$686.180.784[0m en 1 licitaciones
+      Rubro: Consultoria / Consultoria / Planificación y Factibilidad
+
+  [1m 5.[0m BECTON DICKINSON DE CHILE                         
+      RUT: 59.051.480-2    [92m$369.242.100[0m en 1 licitaciones
+      Rubro: Equipamiento para laboratorios / Equipos e insumos para laborator
+
+  [1m 6.[0m SOCIEDAD CMA-COSTANERA SOCIEDAD ANONIMA           
+      RUT: 76.087.116-8    [92m$307.125.000[0m en 1 licitaciones
+      Rubro: Salud, servicios sanitarios y alimentación / Medicina y servicios
+
+  [1m 7.[0m ALATHEIA SPA                                      
+      RUT: 76.036.479-7    [92m$264.250.000[0m en 1 licitaciones
+      Rubro: Equipamiento para laboratorios / Instrumentos de medida y experim
+
+  [1m 8.[0m PENA SPOERER Y CIA S.A.                           
+      RUT: 96.877.150-7    [92m$192.656.000[0m en 2 licitaciones
+      Rubro: Vehículos y equipamiento en general / Vehículos motorizados / Veh
+
+  [1m 9.[0m GRIFOLS CHILE S A                                 
+      RUT: 96.582.310-7    [92m$178.147.200[0m en 1 licitaciones
+      Rubro: Equipamiento y suministros médicos / Equipamiento para instalacio
+
+  [1m10.[0m ALO VENTAS SPA                                    
+      RUT: 76.043.119-2    [92m$152.000.000[0m en 1 licitaciones
+      Rubro: Maquinaria para construcción y edificación / Maquinaria pesada de
+
+
+[96mTIP COMERCIAL:[0m
+  Abre [1mprospectos_top.csv[0m en Excel
+  Las empresas del Top 50 facturan millones del Estado.
+  Ofrece Voltaic Radar a $300K-500K/mes -> No Brainer para ellos.
+
+[+] PROSPECCION ACTIVA COMPLETA FINALIZADA 
+ 

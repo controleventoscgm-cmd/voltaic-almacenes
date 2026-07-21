@@ -1,0 +1,173 @@
+DESCUENTO ANUAL: POR QUE FUNCIONA Y COMO VENDERLO
+El descuento "2 meses gratis si compra el ano" es una de las estrategias de precio mas efectivas para negocios de barrio. Aqui te explico por que:
+POR QUE FUNCIONA PSICOLOGICAMENTE
+El dueno de barrio piensa en plazos largos. No le interesa "ahorro mensual", le interesa "cuanto me sale el ano". Al decirle "el ano le sale $89.000" en vez de "$8.900 al mes", el numero le suena a inversion, no a gasto.
+Le da estabilidad. El dueno odia las sorpresas de fin de mes. Pagar una vez al ano y olvidarse le da paz mental.
+Te da a ti flujo de caja. Recibes $89.000 de golpe en vez de $8.900 mensuales. Eso te permite invertir en mejorar el producto o contratar ayuda.
+Reduce la rotacion. Un cliente que pago el ano completo no se va en el mes 3. Te asegura 12 meses de relacion.
+El "2 meses gratis" suena mejor que "17% de descuento". Es la misma matematica, pero "gratis" vende mas que "descuento".
+COMO PRESENTARLO EN LA VENTA
+"Don Pepe, le propongo dos formas. Puede pagar mes a mes, $8.900. O si se queda el ano completo, le regalo 2 meses. Le sale $89.000 por todo el ano, o sea que paga 10 meses y usa 12. Eso le sale a $7.400 mensual. La mayoria de mis clientes prefiere la opcion del ano porque se olvidan del pago y ahorran casi $18.000."
+PITCH COMPARATIVO VISUAL
+Opcion mensual:
+Paga: $8.900 cada mes
+Total al ano: $106.800
+Se preocupa cada mes de si pago o no
+Opcion anual:
+Paga: $89.000 una sola vez
+Ahorro: $17.800
+Equivalente: $7.400 mensual
+Se olvida del pago por 12 meses
+COMO COBRARLO
+Transferencia bancaria de $89.000 de golpe. No le pidas tarjeta de credito ni cuotas. El dueno de barrio prefiere transferir una vez y listo.
+Si dice que no tiene $89.000 de golpe, no insistas. Ofrecele la mensual. Nunca pierdas una venta por forzar el plan anual.
+CUANDO OFRECER EL PLAN ANUAL
+No lo ofrezcas en la primera visita. En la primera visita solo habla del plan mensual y del mes gratis de prueba.
+El plan anual lo ofreces en la segunda visita, cuando ya lleva 15-20 dias usando la app y le esta funcionando. Ahi tiene confianza y ve el valor.
+"Don Pepe, ya lleva 3 semanas usando la app. Le ha servido la alerta de los fideos y ya cobro 2 fiados por WhatsApp automatico. Si se queda el ano, le hago el precio del ano completo con 2 meses de regalo. Le sale $89.000 y no se preocupa mas del pago."
+REGLA DE ORO
+Nunca vendas el plan anual a un cliente que no ha probado la app al menos 2 semanas. El descuento anual es para retener, no para capturar. Captura con el mes gratis, retiene con el ano completo.
+
+
+FUNCIONES DEL MVP PARA VENDER A NEGOCIOS DE BARRIO EN CHILE
+Version 1.0 - Lista para venta puerta a puerta
+FUNCION 1: REGISTRO DE PRODUCTOS (INVENTARIO BASICO)
+Que hace:
+El dueno agrega productos manualmente: nombre, precio de venta, stock actual, stock minimo deseado
+Puede agregar foto del producto (opcional pero recomendado)
+No requiere codigo de barras escaneado, se tipea o se busca en lista
+Como lo usa el dueno:
+Abre la app en su celular
+Toca "Agregar producto"
+Escribe "Coca-Cola 1.5L"
+Escribe precio de venta: $1.290
+Escribe stock actual: 8
+Escribe stock minimo: 5
+Guarda
+Tiempo de configuracion: 30 segundos por producto
+Productos iniciales recomendados: 20 productos mas vendidos, no mas
+FUNCION 2: ALERTA DE STOCK BAJO
+Que hace:
+Cuando un producto llega al stock minimo, envia mensaje de WhatsApp automatico al dueno
+El mensaje dice: "Don Pepe, le quedan 3 Coca-Cola 1.5L. Su stock minimo es 5. Toque aqui para pedir al distribuidor."
+Incluye boton para generar mensaje de pedido por WhatsApp al distribuidor
+Como lo usa el dueno:
+No hace nada, la alerta llega sola
+Toca el boton del mensaje de WhatsApp
+Se abre WhatsApp con mensaje pre-escrito: "Hola, soy Don Pepe del almacen de Condell. Por favor envieme: 12 Coca-Cola 1.5L. Gracias."
+Frecuencia de alerta: Una vez al dia, a las 8:00 AM, solo si hay productos bajo stock
+No enviar spam: Maximo 1 mensaje diario con resumen de todos los productos bajos
+FUNCION 3: REGISTRO DE FIADO
+Que hace:
+El dueno registra cuando un cliente le compra fiado
+Guarda: nombre del cliente, monto, fecha, productos (opcional)
+Muestra lista de deudores ordenados por dias de mora
+Como lo usa el dueno:
+Toca "Nuevo fiado"
+Selecciona cliente de lista o agrega nuevo
+Escribe monto: $4.500
+Escribe opcional: "2 fideos, 1 aceite"
+Guarda
+Tiempo: 15 segundos
+FUNCION 4: COBRO DE FIADO POR WHATSAPP
+Que hace:
+Envia mensaje automatico de recordatorio al deudor
+El dueno elige cuando enviar: 3 dias, 7 dias, 14 dias despues del fiado
+Mensaje: "Hola Juanito, le recuerdo que tiene $4.500 pendiente con Almacen Don Pepe. Puede pagar cuando le quede comodo. Gracias!"
+Como lo usa el dueno:
+Va a lista de deudores
+Toca el nombre del cliente
+Toca "Enviar recordatorio por WhatsApp"
+Se abre WhatsApp con mensaje pre-escrito, el dueno solo toca enviar
+Ventaja: El dueno no tiene que redactar el mensaje ni recordar cuanto le deben. Evita el conflicto personal.
+FUNCION 5: BOLETA ELECTRONICA SII (TIPO 39)
+Que hace:
+Emite boleta electronica al Servicio de Impuestos Internos de Chile
+Genera PDF de boleta
+Envia boleta por email o WhatsApp al cliente
+Guarda historial de boletas emitidas
+Como lo usa el dueno:
+Toca "Nueva venta"
+Selecciona productos de su lista (o escribe manualmente)
+Toca "Emitir boleta"
+La app genera la boleta, la envia al SII, y muestra numero de boleta
+Opcional: envia por WhatsApp al cliente
+Requisito tecnico: Integracion con API de facturacion electronica (OpenFactura, LibreDTE, o similar)
+Costo adicional para ti: Aprox $3.000-$5.000 mensuales por API de facturacion, incluido en tu precio de $8.900
+FUNCION 6: RESUMEN DIARIO
+Que hace:
+Cada noche a las 21:00, envia mensaje de WhatsApp al dueno con resumen del dia
+Incluye: total vendido, producto mas vendido, stock bajo, fiados nuevos, fiados cobrados
+Mensaje ejemplo:
+"Resumen Almacen Don Pepe - 21 de julio 2026
+Ventas hoy: $87.300
+Producto mas vendido: Coca-Cola 1.5L (12 unidades)
+Stock bajo: Fideos Carozzi (3 unidades)
+Fiados nuevos: 2 clientes, total $8.900
+Fiados cobrados: $5.000
+Buenas noches!"
+FUNCION 7: LISTA DE CLIENTES FRECUENTES
+Que hace:
+Guarda nombre y telefono de clientes habituales
+Permite buscar rapido al registrar fiado o enviar promocion
+Muestra historial de compras por cliente (basico)
+NO INCLUIR EN EL MVP (PARA VERSION 2.0)
+Estas funciones las dejas para despues, cuando ya tengas clientes pagando:
+Factura electronica tipo 33 (para ferreterias y constructoras)
+Multi-sucursal
+Reportes avanzados
+Integracion con bancos
+App para el cliente final
+Sistema de puntos/fidelizacion
+Comparacion de precios con distribuidores
+TECNOLOGIA SUGERIDA PARA EL MVP
+Frontend: App web progresiva (PWA) con HTML/CSS/JavaScript
+Funciona en cualquier celular sin instalar desde App Store
+Se agrega a pantalla de inicio como app nativa
+Se accede por URL o QR
+Backend: Firebase o Supabase (gratis hasta cierto volumen)
+Base de datos en la nube
+Autenticacion de usuarios
+Almacenamiento de datos
+Facturacion electronica: API de OpenFactura o LibreDTE
+Integracion con SII de Chile
+Costo bajo por transaccion
+WhatsApp: API de WhatsApp Business o servicio como Wati/Twilio
+Envio de mensajes automaticos
+Costo por mensaje: aprox $0.05 USD cada uno
+ESTIMACION DE COSTOS TECNICOS MENSUALES (para ti como desarrollador)
+Hojas
+Servicio	Costo estimado mensual
+Hosting Firebase	$0 (gratis hasta 50.000 usuarios)
+API facturacion SII	$3.000 - $5.000
+API WhatsApp	$2.000 - $4.000 (depende de volumen)
+Dominio web	$1.000
+Total costos fijos	$6.000 - $10.000 mensuales
+Margen por cliente: $8.900 - $10.000 costos = necesitas minimo 2 clientes para cubrir costos, 3 para empezar a ganar.
+TIEMPO DE DESARROLLO ESTIMADO
+Si tu sabes programar o tienes un desarrollador:
+MVP funcional (7 funciones): 4 a 6 semanas trabajando medio tiempo
+Pruebas con 2 negocios piloto: 2 semanas adicionales
+Ajustes y pulida: 2 semanas adicionales
+Total: 8 a 10 semanas para salir a vender
+Si no sabes programar y necesitas contratar:
+Presupuesto desarrollador freelance: $800.000 - $1.500.000 CLP
+Tiempo: 6 a 8 semanas
+PRIORIDAD DE FUNCIONES PARA DESARROLLO
+Semana 1-2: Funcion 1 (Registro de productos) + Funcion 2 (Alerta stock)
+Semana 3-4: Funcion 3 (Fiado) + Funcion 4 (Cobro WhatsApp)
+Semana 5-6: Funcion 5 (Boleta SII)
+Semana 7-8: Funcion 6 (Resumen diario) + Funcion 7 (Clientes frecuentes)
+TEST DE VALIDACION RAPIDA (antes de programar todo)
+Antes de invertir 8 semanas en desarrollo, valida en 1 semana:
+Crea una cuenta de Google Sheets compartida con un almacen de tu barrio
+Simula las 7 funciones con formulas y automatizaciones basicas
+El dueno la usa 1 semana real
+Si le sirve, ahi si inviertes en desarrollar la app real
+Si no le sirve, ajustas antes de gastar tiempo y dinero
+ESTO ES LO MINIMO VIABLE
+Con estas 7 funciones, tu app ya es mas util que:
+Un cuaderno (no alerta, no boleta, no fiado digital)
+Rofex ($11.900, sin boleta SII, sin fiado)
+Excel (complejo, no automatico, no integrado)
+Y es 10 veces mas barata que Bsale o Defontana.

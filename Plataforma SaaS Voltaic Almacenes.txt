@@ -1,0 +1,160 @@
+Plataforma SaaS: Voltaic Almacenes
+Arquitectura Multi-Tenant, Modular y Impulsada por IA
+
+1. Visión General
+Voltaic Almacenes es una plataforma SaaS (Software as a Service) de nivel empresarial diseñada para digitalizar y automatizar la gestión de pequeños almacenes, minimarkets y botillerías en Chile.
+
+A diferencia de los sistemas POS tradicionales, Voltaic Almacenes nace con un enfoque Multi-Tenant (un solo backend sirve a múltiples almacenes de forma aislada) e IA-First (automatiza la entrada de datos mediante lenguaje natural y visión artificial).
+
+Principios de Diseño
+Regla de 3: Máximo 3 acciones para cualquier tarea del cajero (Ej: Escanear -> Confirmar -> Cobrar).
+Multi-Tenancy Estricto: Aislamiento de datos por tenantId desde el Middleware hasta la Base de Datos.
+Privacidad por Diseño: Cumplimiento de la Ley 21.719 (Minimización de datos, no se piden RUT en ventas de mostrador).
+IA como Copiloto: El sistema no reemplaza al cajero, lo asiste. La IA estructura el desorden (texto y facturas) en datos limpios.
+2. Arquitectura del Sistema
+Diagrama de Arquitectura
+┌─────────────────────────────────────────────────────────┐│                 FRONTEND (Web Temporal / Flutter)        ││  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐       ││  │Dashboard│ │Inventario│ │  POS    │ │Reportes │       ││  └────┬────┘ └────┬────┘ └────┬────┘ └────┬────┘       ││       └───────────┴───────────┴───────────┘            ││                    │ Header: X-Tenant-ID                │└────────────────────┼────────────────────────────────────┘                     │ (REST API / JSON)┌────────────────────┼────────────────────────────────────┐│               BACKEND (NestJS + TypeScript)             ││  ┌─────────────────┴─────────────────────────────────┐  ││  │                 Middleware Multi-Tenant            │  ││  └─────────────────┬─────────────────────────────────┘  ││  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐       ││  │Tenant Ctx│ │Inventario│ │ Ventas  │ │Compras  │       ││  └────┬────┘ └────┬────┘ └────┬────┘ └────┬────┘       ││       └───────────┴───────────┴───────────┘            ││                    │ Event Bus (NestJS)                 ││  ┌─────────────────┴─────────────────────────────────┐  ││  │                 AI Orchestrator (IA)               │  ││  │  - DeepSeek (Texto -> JSON)                        │  ││  │  - Gemini Vision (Imagen Factura -> JSON)          │  ││  └─────────────────────────────────────────────────────┘  │└────────────────────┬────────────────────────────────────┘                     │┌────────────────────┼────────────────────────────────────┐│              CAPA DE DATOS (TypeORM)                    ││  ┌─────────┐ ┌─────────┐ ┌─────────┐                   ││  │PostgreSQL│ │ SQLite  │ │Backups  │                   ││  │(Prod)   │ │(Dev)    │ │(Autom.) │                   ││  └─────────┘ └─────────┘ └─────────┘                   │└─────────────────────────────────────────────────────────┘
+3. Stack Tecnológico
+Capa
+Tecnología
+Justificación
+Frontend	HTML/CSS/JS (Temporal) -> Flutter	Interfaz oscura, responsiva y futura app móvil nativa (iOS/Android).
+Backend	NestJS (TypeScript)	Arquitectura modular, tipado fuerte, ideal para escalabilidad.
+Base de Datos	PostgreSQL (Prod) / SQLite (Dev)	TypeORM permite cambiar entre ambas sin alterar el código.
+IA Texto	DeepSeek API	Económica, extremadamente precisa para estructurar JSON desde lenguaje natural.
+IA Visión	Google Gemini 1.5 Flash	Excelente lectura de facturas físicas y bajo costo.
+Automatización	node-cron (NestJS Schedule)	Respaldos automáticos y reportes diarios a Telegram.
+Identificadores	UUID v4	Evita colisiones en sincronizaciones offline futuras y oculta conteo de registros.
+
+4. Modelo de Base de Datos (Multi-Tenant)
+El diseño garantiza que ningún almacén pueda ver los datos de otro. Todas las tablas operacionales incluyen tenantId.
+
+Tabla: tenants (Almacenes)
+sql
+
+CREATE TABLE tenants (
+  id UUID PRIMARY KEY,
+  name VARCHAR NOT NULL,
+  plan VARCHAR DEFAULT 'basic',
+  "modulesEnabled" TEXT[] DEFAULT '{"inventory","purchases"}',
+  "backupFrequency" VARCHAR DEFAULT 'none',
+  "telegramChatId" VARCHAR
+);
+Tabla: productos
+sql
+
+CREATE TABLE productos (
+  id UUID PRIMARY KEY,
+  "tenantId" UUID NOT NULL REFERENCES tenants(id),
+  sku VARCHAR NOT NULL,
+  nombre VARCHAR NOT NULL,
+  "stockActual" FLOAT DEFAULT 0,
+  "stockMinimo" FLOAT DEFAULT 5,
+  "precioVenta" INTEGER DEFAULT 0,
+  "precioCosto" INTEGER DEFAULT 0, -- Para cálculo de márgenes
+  "codigoBarras" VARCHAR,
+  "unidadMedida" VARCHAR DEFAULT 'unidad', -- unidad, kg, gr, lt
+  UNIQUE ("tenantId", sku)
+);
+Tabla: tickets (Ventas)
+sql
+
+CREATE TABLE tickets (
+  id UUID PRIMARY KEY,
+  "tenantId" UUID NOT NULL REFERENCES tenants(id),
+  total DECIMAL(10,2) DEFAULT 0,
+  "fechaCreacion" TIMESTAMP DEFAULT NOW()
+);
+Tabla: items_ticket (Detalle de Venta)
+sql
+
+CREATE TABLE items_ticket (
+  id UUID PRIMARY KEY,
+  "ticketId" UUID NOT NULL REFERENCES tickets(id) ON DELETE CASCADE,
+  "productoId" UUID NOT NULL REFERENCES productos(id),
+  cantidad FLOAT NOT NULL, -- Soporta decimales (ej: 0.250 kg)
+  "precioUnitario" DECIMAL(10,2) NOT NULL
+);
+5. Integración de IA (El Copiloto)
+El sistema utiliza IA no como un chat, sino como un motor de estructuración de datos.
+
+5.1 Copiloto de Ventas (DeepSeek)
+El cajero escribe: "vendí 2 cocas y un pan de 0.250 kg"
+
+El backend envía el texto y el inventario del almacén a DeepSeek.
+DeepSeek devuelve un JSON estricto:
+json
+
+{
+  "ticket_sugerido": [
+    { "productoId": "uuid-coca", "cantidad": 2, "precioUnitario": 1500 },
+    { "productoId": "uuid-pan", "cantidad": 0.250, "precioUnitario": 3000 }
+  ]
+}
+El frontend llena el ticket automáticamente. El cajero solo presiona "Cobrar".
+5.2 Lector de Facturas (Gemini Vision)
+El dueño sube una foto de la factura del proveedor.
+
+Gemini lee la imagen y extrae productos, cantidades, costos y unidades de medida.
+Si un producto no existe en la base de datos, se crea automáticamente.
+El sistema aplica un margen de ganancia (ej: 25%) y sugiere el precio de venta.
+6. Flujos de Pago y Transbank
+6.1 Pago en Efectivo (Con Cálculo de IVA y Vuelto)
+El sistema calcula el Total (IVA incluido).
+El cajero ingresa el monto recibido.
+El sistema calcula el vuelto, descuenta el stock (usando transacciones atómicas y bloqueo pesimista) y emite el recibo.
+6.2 Pago con Tarjeta (Integración POS Física)
+Diseñado para la realidad chilena (máquinas Ingenico/Verifone arrendadas).
+
+El cajero presiona "Cobrar Tarjeta".
+El backend envía el monto a la máquina (o el cajero lo digita).
+La app muestra un modal de espera.
+Al aprobarse, se registra el código de autorización y los últimos 4 dígitos en el ticket.
+7. Reportes y Analytics
+El módulo de Analytics precalcula métricas para el Dashboard:
+
+Ventas de Hoy: Filtrado por fechaCreacion >= TODAY.
+Alertas de Bajo Stock: Lista productos donde stockActual <= stockMinimo.
+Ranking de Productos: Usa agregaciones de SQL (SUM(cantidad)) para listar los más vendidos.
+Exportación a Excel: Mediante la librería exceljs, genera archivos .xlsx con formatos de moneda y encabezados estilizados, listos para el contador.
+8. Seguridad y Cumplimiento Legal (Chile)
+8.1 Multi-Tenancy
+Un middleware global intercepta cada petición HTTP:
+
+typescript
+
+const tenantId = req.headers['x-tenant-id'];
+if (!uuidRegex.test(tenantId)) throw new BadRequestException('Tenant inválido');
+req.tenantId = tenantId;
+Todas las consultas de TypeORM filtran implícitamente por este tenantId.
+
+8.2 Cumplimiento Ley 21.719 (Protección de Datos)
+Minimización: El sistema no pide RUT ni datos personales para ventas de mostrador (Boleta VIP).
+Privacidad: Las API Keys de IA y Telegram viven en el backend (.env), nunca en el frontend.
+9. Roadmap de Implementación
+Fase 1: MVP y Core SaaS (Completado ✅)
+Arquitectura Multi-Tenant con UUID.
+Inventario transaccional (Crear, Editar, Eliminar).
+Ventas rápidas con descuento de stock asíncrono (Event Bus).
+Copiloto IA de texto (DeepSeek).
+Lector de Facturas IA (Gemini) con creación automática de productos y márgenes.
+Respaldos automáticos programables a Telegram.
+Fase 2: POS Profesional (En Progreso 🚧)
+Integración real con POS Transbank (SDK Node.js).
+Sistema de "Fiado" (Cuentas por Cobrar) para clientes habituales.
+Persistencia local en App Móvil (Flutter + SQLite local para modo Offline).
+Fase 3: Escalabilidad y Producción (Pendiente ⏳)
+Despliegue en la nube (AWS/DigitalOcean) con Docker y PostgreSQL.
+Sistema de Suscripciones (Feature Flags) para cobrar planes Basic/Premium.
+App Móvil nativa publicada en App Store y Google Play.
+Fase 4: Automatización Avanzada (Futuro 🚀)
+Integración directa con API del SII (Chile).
+Pedidos automáticos a proveedores por WhatsApp cuando hay bajo stock.
+Análisis predictivo de demanda.
+text
+
+Enter your code here...
+continua 
+
+
+
