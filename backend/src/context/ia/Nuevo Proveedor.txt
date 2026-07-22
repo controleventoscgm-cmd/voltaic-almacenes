@@ -1,0 +1,21 @@
+Nuevo Proveedor
+Nombre
+Coca-Cola Company
+RUT
+77.000.000-0
+Guardar
+Generar Orden (Borrador)
+Proveedor
+
+Coca-Cola Company
+Producto
+
+Coca-Cola 1,5 L
+Cantidad
+50
+Precio Unit.
+1000
+Crear Borrador
+ID Orden
+Estado
+Acción
