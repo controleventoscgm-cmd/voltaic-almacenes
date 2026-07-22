@@ -17,6 +17,6 @@ export class MovimientoInventario {
   @Column({ type: 'float' }) // <--- CAMBIO A FLOAT
   cantidad: number;
 
-  @CreateDateColumn({ type: 'datetime' })
+   @CreateDateColumn()
   fecha: Date;
 }

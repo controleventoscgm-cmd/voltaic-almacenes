@@ -23,7 +23,7 @@ export class OrdenDeCompra {
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
   total: number;
 
-  @CreateDateColumn({ type: 'datetime' })
+  @CreateDateColumn()
   fechaCreacion: Date;
 
   @OneToMany(() => ItemOrdenCompra, item => item.orden, { cascade: true })

@@ -12,7 +12,7 @@ export class Ticket {
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
   total: number;
 
-  @CreateDateColumn({ type: 'datetime' })
+  @CreateDateColumn()
   fechaCreacion: Date;
 
   @OneToMany(() => ItemTicket, item => item.ticket, { cascade: true })
