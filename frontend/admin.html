@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admin - Voltaic Almacenes</title>
+    <style>
+        :root { --bg-app: #08090a; --bg-sidebar: #0f1112; --bg-card: #131516; --bg-input: #18191a; --border-subtle: #232627; --border-hover: #2f3334; --text-primary: #f5f5f5; --text-secondary: #a1a1a1; --text-muted: #6b6b6b; --accent-blue: #3b82f6; --accent-blue-glow: rgba(59, 130, 246, 0.15); --accent-green: #22c55e; --accent-yellow: #eab308; --accent-red: #ef4444; --radius-sm: 6px; --radius-md: 8px; --radius-lg: 12px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', -apple-system, sans-serif; background-color: var(--bg-app); color: var(--text-primary); font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .login-container { background: var(--bg-card); border: 1px solid var(--border-subtle); padding: 40px; border-radius: var(--radius-lg); text-align: center; max-width: 400px; width: 100%; }
+        .login-container h1 { color: var(--accent-blue); margin-bottom: 10px; }
+        .login-container p { color: var(--text-muted); margin-bottom: 30px; }
+        .btn-google { background: #fff; color: #000; border: none; padding: 12px 20px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; transition: opacity 0.2s; }
+        .btn-google:hover { opacity: 0.9; }
+        .error { color: var(--accent-red); margin-top: 20px; font-size: 13px; display: none; }
+        .dashboard { display: none; width: 100%; max-width: 1000px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 24px; }
+        .dash-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-subtle); }
+        .dash-title { font-size: 20px; font-weight: 600; }
+        .btn-logout { background: transparent; border: 1px solid var(--border-hover); color: var(--text-secondary); padding: 8px 16px; border-radius: var(--radius-sm); cursor: pointer; font-size: 12px; }
+        .btn-logout:hover { border-color: var(--accent-red); color: var(--accent-red); }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 30px; }
+        .stat-card { background: var(--bg-app); padding: 16px; border-radius: var(--radius-md); border-left: 4px solid var(--border-subtle); }
+        .stat-card h3 { font-size: 11px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; letter-spacing: 0.5px; }
+        .stat-card .stat-number { font-size: 24px; font-weight: 700; }
+        .stat-card.active { border-left-color: var(--accent-green); }
+        .stat-card.active .stat-number { color: var(--accent-green); }
+        .stat-card.warning { border-left-color: var(--accent-yellow); }
+        .stat-card.warning .stat-number { color: var(--accent-yellow); }
+        .stat-card.danger { border-left-color: var(--accent-red); }
+        .stat-card.danger .stat-number { color: var(--accent-red); }
+        .stat-card.income { border-left-color: var(--accent-blue); }
+        .stat-card.income .stat-number { color: var(--accent-blue); }
+        .btn-primary { background: var(--accent-blue); color: #fff; border: none; padding: 10px 16px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; margin-bottom: 20px; display: block; width: 200px; text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border-subtle); font-size: 13px; }
+        th { color: var(--text-muted); text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; }
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; text-transform: uppercase; }
+        .badge-activa { background: rgba(34, 197, 94, 0.2); color: var(--accent-green); }
+        .badge-vencida { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); }
+        .badge-prueba { background: rgba(234, 179, 8, 0.2); color: var(--accent-yellow); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+        .input-group label { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; display: block; }
+        input, select { background: var(--bg-input); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px; color: var(--text-primary); font-size: 14px; width: 100%; }
+        .hidden { display: none; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 100; }
+        .modal-card { background: var(--bg-card); padding: 30px; border-radius: var(--radius-lg); width: 90%; max-width: 500px; }
+        .modal-header { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        .btn-success { background: var(--accent-green); color: #fff; }
+        .btn-secondary { background: transparent; border: 1px solid var(--border-hover); color: var(--text-primary); padding: 8px 12px; border-radius: var(--radius-sm); cursor: pointer; font-size: 12px; }
+        .code-display { background: var(--bg-app); padding: 15px; border-radius: var(--radius-sm); text-align: center; font-size: 24px; letter-spacing: 2px; font-weight: bold; color: var(--accent-green); margin: 15px 0; }
+    </style>
+</head>
+<body>
+
+    <!-- LOGIN -->
+    <div class="login-container" id="login-container">
+        <h1>⚡ Voltaic Admin</h1>
+        <p>Panel de Administración de Licencias</p>
+        <button class="btn-google" onclick="loginGoogle()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M21.35 11.1H12v3.2h5.35c-.55 2.5-2.7 4.3-5.35 4.3-3.2 0-5.8-2.6-5.8-5.8s2.6-5.8 5.8-5.8c1.5 0 2.8.5 3.8 1.4l2.3-2.3C16.5 4.5 14.4 3.5 12 3.5 6.7 3.5 2.5 7.7 2.5 13s4.2 9.5 9.5 9.5c5.3 0 8.8-3.7 8.8-9 0-.7-.1-1.3-.45-2.4z"></path></svg>
+            Iniciar sesión con Google
+        </button>
+        <div class="error" id="error-msg">Acceso denegado. Esta cuenta no tiene permisos de administrador.</div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="dashboard" id="dashboard">
+        <div class="dash-header">
+            <div class="dash-title">Panel de Licencias</div>
+            <button class="btn-logout" onclick="logout()">Cerrar Sesión</button>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card active">
+                <h3>Activas</h3>
+                <div class="stat-number" id="stat-activas">0</div>
+            </div>
+            <div class="stat-card warning">
+                <h3>Por Vencer (7 días)</h3>
+                <div class="stat-number" id="stat-vencer">0</div>
+            </div>
+            <div class="stat-card danger">
+                <h3>Vencidas</h3>
+                <div class="stat-number" id="stat-vencidas">0</div>
+            </div>
+            <div class="stat-card income">
+                <h3>Ingreso Mensual Est.</h3>
+                <div class="stat-number" id="stat-ingreso">$0</div>
+            </div>
+        </div>
+
+        <button class="btn-primary" onclick="openModal()">+ Crear Nueva Licencia</button>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Negocio</th>
+                    <th>Plan</th>
+                    <th>Inicio</th>
+                    <th>Término</th>
+                    <th>Estado</th>
+                    <th>Código</th>
+                </tr>
+            </thead>
+            <tbody id="licencias-tbody"></tbody>
+        </table>
+    </div>
+
+    <!-- MODAL CREAR LICENCIA -->
+    <div class="modal-overlay" id="modal-crear">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2>Nueva Licencia</h2>
+                <button class="btn-secondary" onclick="closeModal()">✕</button>
+            </div>
+            <div id="form-crear">
+                <div class="form-row">
+                    <div class="input-group">
+                        <label>Negocio</label>
+                        <input type="text" id="negocio" placeholder="Minimarket Don Juan">
+                    </div>
+                    <div class="input-group">
+                        <label>RUT</label>
+                        <input type="text" id="rut" placeholder="12.345.678-9">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="input-group">
+                        <label>Teléfono (WhatsApp)</label>
+                        <input type="text" id="telefono" placeholder="+56912345678">
+                    </div>
+                    <div class="input-group">
+                        <label>Plan</label>
+                        <select id="plan">
+                            <option value="prueba">Prueba (30 días)</option>
+                            <option value="mensual">Mensual</option>
+                            <option value="anual">Anual</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn-primary btn-success" style="width: 100%;" onclick="crearLicencia()">Generar Licencia</button>
+            </div>
+            <div id="result-crear" class="hidden">
+                <h3 style="text-align: center; margin-bottom: 10px;">¡Licencia Creada!</h3>
+                <p style="text-align: center; font-size: 12px; color: var(--text-muted);">Código de activación:</p>
+                <div class="code-display" id="codigo-generado"></div>
+                <button class="btn-primary btn-success" style="width: 100%; margin-bottom: 10px;" onclick="enviarWhatsApp()">Enviar por WhatsApp</button>
+                <button class="btn-secondary" style="width: 100%;" onclick="closeModal()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script>
+        // TU CONFIGURACIÓN DE FIREBASE
+        const firebaseConfig = {
+            apiKey: "AIzaSyAVFw4tqJg1xjUKj5LdD81YsrHPfScCaQ4",
+            authDomain: "voltaic-almacenes.firebaseapp.com",
+            projectId: "voltaic-almacenes",
+            storageBucket: "voltaic-almacenes.firebasestorage.app",
+            messagingSenderId: "121426985235",
+            appId: "1:121426985235:web:bf17015223f0463b731ae6"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        let ultimoCodigoGenerado = "";
+        let ultimoTelefono = "";
+
+        // Verificar sesión al cargar
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                // Verificar si es admin
+                const adminDoc = await db.collection('administradores').doc(user.uid).get();
+                if (adminDoc.exists) {
+                    document.getElementById('login-container').style.display = 'none';
+                    document.getElementById('dashboard').style.display = 'block';
+                    cargarLicencias();
+                } else {
+                    // No es admin, cerrar sesión
+                    await auth.signOut();
+                    document.getElementById('error-msg').style.display = 'block';
+                }
+            } else {
+                document.getElementById('login-container').style.display = 'block';
+                document.getElementById('dashboard').style.display = 'none';
+            }
+        });
+
+        async function loginGoogle() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            try {
+                await auth.signInWithPopup(provider);
+            } catch (error) {
+                alert("Error al iniciar sesión: " + error.message);
+            }
+        }
+
+        async function logout() {
+            await auth.signOut();
+        }
+
+        async function cargarLicencias() {
+            try {
+                const snapshot = await db.collection('licencias').get();
+                let activas = 0, vencer = 0, vencidas = 0, ingreso = 0;
+                const hoy = new Date();
+                const en7dias = new Date(hoy.getTime() + 7 * 24 * 60 * 60 * 1000);
+                const tbody = document.getElementById('licencias-tbody');
+                tbody.innerHTML = '';
+
+                snapshot.forEach(doc => {
+                    const lic = doc.data();
+                    const fTermino = new Date(lic.fecha_termino);
+                    let estadoClase = 'badge-activa';
+                    let estadoTexto = 'Activa';
+
+                    if (fTermino < hoy) {
+                        estadoClase = 'badge-vencida';
+                        estadoTexto = 'Vencida';
+                        vencidas++;
+                    } else {
+                        activas++;
+                        if (lic.tipo_plan === 'mensual') ingreso += 8900;
+                        if (lic.tipo_plan === 'anual') ingreso += 7417;
+                        if (fTermino <= en7dias) {
+                            vencer++;
+                            estadoTexto = 'Por Vencer';
+                            estadoClase = 'badge-prueba';
+                        }
+                    }
+
+                    document.getElementById('licencias-tbody').innerHTML += `
+                        <tr>
+                            <td>${lic.negocio}</td>
+                            <td>${lic.tipo_plan}</td>
+                            <td>${lic.fecha_inicio}</td>
+                            <td>${lic.fecha_termino}</td>
+                            <td><span class="badge ${estadoClase}">${estadoTexto}</span></td>
+                            <td style="font-family: monospace; letter-spacing: 1px;">${lic.codigo}</td>
+                        </tr>
+                    `;
+                });
+
+                document.getElementById('stat-activas').textContent = activas;
+                document.getElementById('stat-vencer').textContent = vencer;
+                document.getElementById('stat-vencidas').textContent = vencidas;
+                document.getElementById('stat-ingreso').textContent = '$' + ingreso.toLocaleString('es-CL');
+
+            } catch (error) {
+                console.error("Error cargando licencias:", error);
+                alert("Error al cargar licencias. Revisa la consola.");
+            }
+        }
+
+        function openModal() {
+            document.getElementById('modal-crear').style.display = 'flex';
+            document.getElementById('form-crear').classList.remove('hidden');
+            document.getElementById('result-crear').classList.add('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('modal-crear').style.display = 'none';
+        }
+
+        async function crearLicencia() {
+            const negocio = document.getElementById('negocio').value;
+            const rut = document.getElementById('rut').value;
+            const telefono = document.getElementById('telefono').value;
+            const plan = document.getElementById('plan').value;
+
+            if(!negocio || !telefono) return alert("Negocio y Teléfono son obligatorios");
+
+            const codigo = generarCodigo(10);
+            const hoy = new Date();
+            let termino = new Date(hoy);
+            if (plan === 'prueba' || plan === 'mensual') termino.setDate(termino.getDate() + 30);
+            if (plan === 'anual') termino.setDate(termino.getDate() + 365);
+
+            const fechaInicioStr = hoy.toISOString().split('T')[0];
+            const fechaTerminoStr = termino.toISOString().split('T')[0];
+
+            try {
+                await db.collection('licencias').add({
+                    codigo: codigo,
+                    negocio: negocio,
+                    rut: rut,
+                    telefono: telefono,
+                    tipo_plan: plan,
+                    fecha_inicio: fechaInicioStr,
+                    fecha_termino: fechaTerminoStr,
+                    estado: 'activa',
+                    creado_por: auth.currentUser.uid,
+                    fecha_creacion: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                ultimoCodigoGenerado = codigo;
+                ultimoTelefono = telefono;
+
+                document.getElementById('form-crear').classList.add('hidden');
+                document.getElementById('result-crear').classList.remove('hidden');
+                document.getElementById('codigo-generado').textContent = codigo;
+                
+                cargarLicencias(); // Actualizar tabla
+            } catch(error) {
+                alert("Error al crear licencia: " + error.message);
+            }
+        }
+
+        function generarCodigo(longitud) {
+            const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let resultado = '';
+            for (let i = 0; i < longitud; i++) {
+                resultado += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+            }
+            return resultado;
+        }
+
+        function enviarWhatsApp() {
+            const mensaje = `Hola ${document.getElementById('negocio').value}! Su licencia para Voltaic Almacenes ha sido creada exitosamente.\n\nCódigo de activación: ${ultimoCodigoGenerado}\n\nIngréselo en la aplicación para comenzar a usarla.\n\nSoporte VoltaicTech.`;
+            const url = `https://wa.me/${ultimoTelefono.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(mensaje)}`;
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
