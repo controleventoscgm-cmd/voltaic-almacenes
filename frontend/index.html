@@ -56,19 +56,21 @@
         .chat-input-area { padding: 15px; border-top: 1px solid var(--border-subtle); display: flex; gap: 10px; }
         .chat-input-area input { flex-grow: 1; }
         
-        /* CSS MÓVIL: MENÚ HAMBURGUESA */
-        .hamburger-btn, .overlay { display: none; }
+        /* CSS MÓVIL: MENÚ HAMBURGUESA CORREGIDO */
+        .hamburger-btn { display: none; }
+        .overlay { display: none; }
         @media (max-width: 768px) { 
             body { overflow-y: auto; height: auto; }
             .app-layout { display: block; min-height: 100vh; } 
             .hamburger-btn {
-                display: flex; position: fixed; top: 15px; right: 15px; z-index: 2000;
-                background: var(--accent-blue); color: white; width: 45px; height: 45px; border-radius: 10px; font-size: 22px; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+                display: block; position: absolute; top: 15px; right: 15px; z-index: 2000;
+                background: var(--accent-blue); color: white; width: 45px; height: 45px; border-radius: 10px; font-size: 22px; text-align: center; line-height: 45px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.4);
             }
-            .overlay { display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1500; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
-            .overlay.active { opacity: 1; pointer-events: auto; }
+            .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1500; }
+            .overlay.active { display: block; }
             .sidebar {
                 position: fixed; top: 0; left: -260px; width: 240px; height: 100vh; z-index: 2000; transition: left 0.3s ease;
+                display: flex; flex-direction: column;
             } 
             .sidebar.active { left: 0; } 
             .main-content {
