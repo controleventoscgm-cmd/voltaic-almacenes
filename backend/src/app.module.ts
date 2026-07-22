@@ -1,4 +1,4 @@
-import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
+import { Module, MiddlewareConsumer, NestModule, RequestMethod } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { EventEmitterModule } from '@nestjs/event-emitter';
@@ -19,10 +19,6 @@ import { TenantMiddleware } from './context/shared/middleware/tenant.middleware'
     ConfigModule.forRoot({ isGlobal: true }),
     ScheduleModule.forRoot(),
     EventEmitterModule.forRoot({ wildcard: true }),
-    
-    // CONFIGURACIÓN INTELIGENTE:
-    // Si hay DATABASE_URL (en la nube), usa PostgreSQL. 
-    // Si no hay (en tu PC), usa SQLite.
     TypeOrmModule.forRootAsync({
       useFactory: () => {
         if (process.env.DATABASE_URL) {
@@ -31,7 +27,7 @@ import { TenantMiddleware } from './context/shared/middleware/tenant.middleware'
             url: process.env.DATABASE_URL,
             autoLoadEntities: true,
             synchronize: true,
-            ssl: { rejectUnauthorized: false }, // Requerido por Supabase
+            ssl: { rejectUnauthorized: false },
           };
         }
         return {
@@ -42,7 +38,6 @@ import { TenantMiddleware } from './context/shared/middleware/tenant.middleware'
         };
       },
     }),
-
     TenantModule,
     InventarioModule,
     ComprasModule,
@@ -56,17 +51,18 @@ import { TenantMiddleware } from './context/shared/middleware/tenant.middleware'
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(TenantMiddleware).forRoutes(
-      'api/v1/inventario',
+    // Eximimos las rutas de CREAR y BUSCAR almacenes del middleware de seguridad
+    consumer.apply(TenantMiddleware).exclude(
+      { path: 'api/v1/tenants', method: RequestMethod.POST },
+      { path: 'api/v1/tenants/nombre/:name', method: RequestMethod.GET }
+    ).forRoutes(
       'api/v1/inventario/*',
       'api/v1/compras/*',
       'api/v1/ventas/*',
       'api/v1/analytics/*',
       'api/v1/ia/*',
-      'api/v1/tenants',
-      'api/v1/tenants/*',
+      'api/v1/tenants/*', // Esto cubre el PATCH de configuración
       'api/v1/transbank/*',
-      'api/v1/clientes',
       'api/v1/clientes/*'
     );
   }

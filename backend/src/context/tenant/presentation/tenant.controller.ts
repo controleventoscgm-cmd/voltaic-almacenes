@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Get, Patch, Req } from '@nestjs/common';
+import { Body, Controller, Post, Get, Patch, Param, Req } from '@nestjs/common';
 import { Request } from 'express';
 import { TenantService } from '../application/tenant.service';
 
@@ -13,20 +13,17 @@ export class TenantController {
   }
 
   @Get('nombre/:name')
-  async getByName(@Req() req: Request) {
-    // Modificado para obtener el tenant completo por ID desde el token
-    const tenantId = (req as any).tenantId as string;
-    const tenant = await this.tenantService.findById(tenantId);
+  async getByName(@Param('name') name: string) {
+    const tenant = await this.tenantService.findByName(name);
     return { 
       tenantId: tenant.id, 
       name: tenant.name, 
       plan: tenant.plan,
-      horaReporte: tenant.horaReporte,
-      telegramChatId: tenant.telegramChatId,
       backupFrequency: tenant.backupFrequency,
-      backupDayOfWeek: tenant.backupDayOfWeek,
       backupTime: tenant.backupTime,
-      backupConfig: tenant.backupConfig
+      backupDayOfWeek: tenant.backupDayOfWeek,
+      backupConfig: tenant.backupConfig,
+      telegramChatId: tenant.telegramChatId
     };
   }
 
