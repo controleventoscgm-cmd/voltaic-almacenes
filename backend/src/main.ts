@@ -4,14 +4,15 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   
-  // Habilitar CORS para el frontend local
+  // Configuración CORS para permitir que Vercel hable con Render
   app.enableCors({
-    origin: '*',
-    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'X-Tenant-ID'],
+    origin: '*', // Permite cualquier dominio (Vercel)
+    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'X-Tenant-ID'], // ¡Esta línea es la clave!
   });
 
-  await app.listen(3001);
-  console.log(`Aplicación corriendo en http://localhost:3001`);
+  const PORT = process.env.PORT || 3001;
+  await app.listen(PORT);
+  console.log(`Aplicación corriendo en el puerto ${PORT}`);
 }
 bootstrap();
