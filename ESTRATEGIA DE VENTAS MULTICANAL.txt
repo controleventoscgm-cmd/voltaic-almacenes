@@ -1,0 +1,195 @@
+ESTRATEGIA DE VENTAS MULTICANAL PARA NEGOCIOS DE BARRIO EN CHILE
+Combinación de puerta a puerta + digital + referidos. No dependas de un solo canal.
+CANAL 1: GOOGLE MAPS Y GOOGLE MY BUSINESS
+Qué hacer:
+Busca en Google Maps los almacenes, botillerías, ferreterías y minimarkets de tu zona.
+Cómo buscar:
+Abre Google Maps
+Escribe: "almacén Nunoa" o "botillería La Florida" o "minimarket Providencia"
+Filtra por "abierto ahora" para ver negocios activos
+Haz clic en cada uno y obtén:
+Nombre del negocio
+Dirección exacta
+Teléfono (si lo tienen publicado)
+Horario de atención
+Fotos del negocio (para identificar si es de barrio o cadena)
+Reseñas (para ver si el dueño responde, eso indica que está presente)
+Qué hacer con esa información:
+Crea una hoja de Excel con esta estructura:
+Hojas
+Nombre del negocio	Dirección	Teléfono	Horario	Dueño presente?	Visitado?	Interesado?	Fecha contacto	Resultado
+Almacén Don Pepe	Condell 123, Nunoa	+56912345678	8:00-22:00	Sí	No	-	-	-
+Botillería El Rápido	Vicuña Mackenna 456	No tiene	10:00-02:00	Sí	No	-	-	-
+Prioriza los que tienen teléfono publicado: puedes contactarlos antes de ir.
+CANAL 2: WHATSAPP BUSINESS (VENTA REMOTA)
+Cómo funciona:
+Contactas por WhatsApp a los negocios que encontraste en Google Maps.
+Mensaje inicial (no vendas de inmediato, investiga primero):
+"Hola, buenos días. Veo que tienen un almacén en [dirección]. Soy de una empresa que ayuda a almacenes y negocios de barrio a controlar su inventario y fiados con una app simple. ¿Me podría indicar quién es el dueño o administrador para poder conversar? Gracias."
+Si te responden y te pasan con el dueño:
+"Hola Don Pepe, soy [Tu Nombre]. Trabajo con varios almacenes de Nunoa ayudándolos a no quedarse sin stock los fines de semana y a cobrar los fiados automático por WhatsApp. Le puedo mostrar cómo funciona en 5 minutos cuando le quede cómodo. ¿Tiene un momento esta semana?"
+Reglas del WhatsApp de ventas:
+No envíes el precio en el primer mensaje
+No adjuntes brochures ni links largos
+Pregunta por el dueño, no vendas al empleado
+Si no responden en 3 días, no insistas más con ese negocio
+Máximo 2 mensajes de seguimiento por negocio
+CANAL 3: INSTAGRAM Y REDES SOCIALES DE LOS NEGOCIOS
+Muchos negocios de barrio en Santiago tienen Instagram, aunque sea básico.
+Cómo encontrarlos:
+Busca en Instagram: #almacennunoa #botilleriasantiago #minimarketlflorida
+O busca directamente el nombre del negocio que encontraste en Google Maps
+Revisa quién sigue a cuentas de distribuidores locales (Coca-Cola, Nestlé, etc.) en tu zona
+Qué hacer:
+Sigue la cuenta del negocio
+Dale like a 2-3 publicaciones (no más, no seas stalker)
+Envía un mensaje directo:
+"Hola Don Pepe, vi su almacén en Instagram. Me dedico a ayudar a negocios de barrio a controlar su inventario con una app simple. ¿Le interesaría que le muestre cómo funciona? Me acerco cuando le quede cómodo."
+Ventaja de Instagram:
+El dueño joven (hijo del dueño original) suele manejar la cuenta
+Puedes ver fotos del negocio y evaluar si es tu mercado objetivo
+Es menos invasivo que llegar de sorpresa
+CANAL 4: FACEBOOK MARKETPLACE Y GRUPOS LOCALES
+Grupos de Facebook donde están los dueños de negocios de barrio:
+"Almaceneros de Santiago"
+"Comerciantes de Nunoa"
+"Emprendedores de La Florida"
+"Distribución mayorista Santiago"
+"Ferreteros de Chile"
+Qué hacer:
+Únete como miembro, no como vendedor
+Lee primero durante 3-5 días para entender el tono del grupo
+Responde preguntas de otros miembros (sobre proveedores, precios, etc.)
+Después de una semana, publica un post de valor:
+"Compañeros almaceneros, llevo 2 meses ayudando a negocios de barrio de Nunoa a controlar su inventario con una app que les avisa cuando se les acaba algo y les cobra el fiado por WhatsApp automático. Si a alguien le interesa que le muestre cómo funciona (sin compromiso), me escribe por interno. Saludos."
+Reglas de grupos de Facebook:
+Nunca vendas directamente en el primer post
+No uses lenguaje corporativo, habla como ellos hablan
+Responde todos los comentarios rápido
+Si te bannean de un grupo, no insistas, pasa al siguiente
+CANAL 5: REFERIDOS (EL MÁS PODEROSO)
+Cómo funciona:
+Cada cliente que te pague te debe traer al menos 1 cliente nuevo.
+Sistema de referidos:
+"Don Pepe, si conoce a otro almacenero o botillería que le pueda servir la app, le hago esto: por cada cliente que me refiera y pague, le regalo 1 mes gratis de su licencia. Si me refiere 3, tiene 3 meses gratis. Sin límite."
+Por qué funciona:
+Los almaceneros se conocen entre sí
+Confían más en la recomendación de un colega que en un desconocido
+El incentivo es claro y tangible (meses gratis, no descuentos confusos)
+Cómo implementarlo:
+Crea un código de referido único para cada cliente
+Ejemplo: Don Pepe tiene el código REF-DONPEPE
+Cuando un nuevo cliente se registra, pregunta: "¿Quién te recomendó?"
+Si dice Don Pepe, registras la referencia y le aplicas el mes gratis
+Seguimiento de referidos en tu panel admin:
+Hojas
+Cliente referidor	Codigo	Referidos exitosos	Meses gratis acumulados	Meses usados
+Don Pepe	REF-DONPEPE	2	2	0
+Maria Gonzalez	REF-MARIA	1	1	0
+CANAL 6: DISTRIBUIDORES Y PROVEEDORES (B2B2C)
+Los distribuidores de bebidas, fideos, aceite, etc. visitan decenas de almacenes diariamente.
+Quiénes son:
+Distribuidores de Coca-Cola, Pepsi
+Distribuidores de Nestlé, Carozzi, Lucchetti
+Distribuidores de Colun, Soprole
+Distribuidores de cerveza (Cristal, Escudo)
+Cómo contactarlos:
+Ve a un almacen cuando llegue el distribuidor
+Preséntate: "Hola, soy [Tu Nombre], trabajo con varios almacenes ayudándolos a controlar inventario. ¿Usted conoce a otros almaceneros que le podría servir?"
+Déjale tu tarjeta o número
+Ofrece comisión: "Por cada almacén que me refiera y pague, le pago $5.000"
+Por qué funciona:
+El distribuidor ya tiene relación de confianza con el almacenero
+Visita el negocio semanalmente, puede recomendarte en persona
+Le conviene que el almacenero esté organizado (pide más, pide a tiempo)
+CANAL 7: FERIAS Y EVENTOS LOCALES
+Eventos donde están los negocios de barrio:
+Ferias del barrio (Nunoa, Providencia, Las Condes organizan ferias comerciales)
+Eventos de la Cámara de Comercio de Santiago (tienen eventos para pymes)
+Lanzamientos de productos de grandes marcas (Coca-Cola, Nestlé invitan a almaceneros)
+Qué llevar:
+Celular con la app funcionando (demo en vivo)
+2-3 testimonios de clientes (foto del dueño + nombre del negocio)
+Tarjetas simples con tu WhatsApp
+No lleves laptops ni banners corporativos, no encajan en este mercado
+Pitch en feria:
+"Hola Don Pepe, ¿le ha pasado que se le acaban las Coca-Cola los viernes? Le muestro en 1 minuto cómo evitar eso..." (muestras la app en tu celular)
+CANAL 8: EMAIL MARKETING (PARA NEGOCIOS QUE TIENEN EMAIL)
+No es el canal principal para almacenes de barrio, pero sirve para ferreterías y negocios más formales.
+Cómo conseguir emails:
+Google Maps (algunos negocios lo publican)
+Cámaras de comercio locales
+Directorios de pymes
+Email sugerido:
+Asunto: ¿Se le acaban los productos los fines de semana?
+Hola Don Pepe,
+Soy [Tu Nombre]. Trabajo con almacenes y negocios de barrio de [tu zona] ayudándolos a:
+Saber exactamente cuándo pedir más productos al distribuidor
+Cobrar los fiados automático por WhatsApp sin pelearse con los vecinos
+Emitir boletas electrónicas al SII en 10 segundos
+Le cuento que al almacén de la esquina de [calle conocida] le instalé la app hace 2 meses y me dijo que dejó de quedarse sin stock los fines de semana.
+¿Le interesa que le muestre cómo funciona? No le tomo más de 5 minutos y sin compromiso.
+Mi WhatsApp es +569XXXXXXXX.
+Saludos,
+[Tu Nombre]
+Reglas de email:
+Máximo 1 email por negocio
+Si no responde en 5 días, no insistas
+Nunca adjuntes archivos, solo texto
+CANAL 9: WHATSAPP STATUS (ESTADOS)
+Si tienes varios clientes agregados en WhatsApp, usa los Estados para marketing sutil.
+Ejemplos de estados:
+Foto de un almacén usando tu app: "Almacén Don Pepe ya no se queda sin Coca-Cola los viernes 🥤"
+Screenshot de un resumen diario: "Así se ve cuando tienes el control de tu negocio 📊"
+Video corto de la alerta de stock: "La app le avisa antes de que se acabe 🔔"
+Testimonio de un cliente: "Don Pepe: 'Antes perdía 2 horas al día contando stock, ahora la app lo hace sola'"
+Frecuencia: 1 estado por día, máximo 3 por semana. No seas spam.
+CANAL 10: PEGATINAS Y MATERIAL EN EL NEGOCIO DEL CLIENTE
+Cuando un cliente está contento, pídele permiso para dejar:
+Una pequeña pegatina en la puerta: "Este negocio usa [Tu App] para mejorar su atención"
+Un sticker en la caja registradora: "Pregunta por nuestro fiado digital"
+Un letrero pequeño: "Boleta electrónica al instante"
+Eso genera curiosidad en los clientes del almacén (consumidores finales) y en otros almaceneros que pasan por ahí.
+CRONOGRAMA SEMANAL DE ACTIVIDADES DE VENTA
+Lunes:
+Mañana: Buscar 10 negocios nuevos en Google Maps
+Tarde: Contactar por WhatsApp a 5 negocios encontrados la semana pasada
+Martes:
+Mañana: Visita puerta a puerta en barrio A (5 negocios)
+Tarde: Seguimiento WhatsApp a visitas del lunes
+Miércoles:
+Mañana: Publicar en 2 grupos de Facebook
+Tarde: Visita puerta a puerta en barrio B (5 negocios)
+Jueves:
+Mañana: Seguimiento a referidos de clientes actuales
+Tarde: Visita puerta a puerta en barrio C (5 negocios)
+Viernes:
+Mañana: Revisar panel admin, renovar licencias por vencer
+Tarde: Visita a clientes actuales para soporte y pedir referidos
+Sábado:
+Mañana: Feria local o evento comercial (si hay)
+Tarde: Descanso o desarrollo de app
+Domingo:
+Descanso
+Meta semanal:
+15 contactos nuevos (WhatsApp, Instagram, email)
+10 visitas puerta a puerta
+2 demos exitosas
+1 cliente nuevo pagado
+MÉTRICAS DE VENTA A SEGUIR
+Hojas
+Métrica	Meta mensual	Cómo calcular
+Contactos nuevos	60	Cada WhatsApp, Instagram, email enviado
+Visitas puerta a puerta	40	Cada negocio donde tocaste la puerta
+Demos realizadas	15	Cada vez que mostraste la app funcionando
+Clientes nuevos (prueba)	10	Cada licencia demo creada
+Clientes nuevos (pagados)	5	Cada licencia que pasa de demo a pago
+Tasa de conversión demo-pago	50%	Pagados / Demos
+Ingreso mensual nuevo	$44.500	5 clientes x $8.900
+Referidos generados	3	Clientes que trajeron otro cliente
+PRIORIDAD DE CANALES (PARA EMPEZAR)
+Fase 1 (Semanas 1-4): Puerta a puerta + Google Maps
+Fase 2 (Semanas 5-8): Agregar WhatsApp Business + Referidos
+Fase 3 (Semanas 9-12): Agregar Instagram + Distribuidores
+Fase 4 (Mes 4+): Agregar Facebook Groups + Ferias + Email
+No intentes todos los canales a la vez. Domina uno, luego agrega el siguiente.

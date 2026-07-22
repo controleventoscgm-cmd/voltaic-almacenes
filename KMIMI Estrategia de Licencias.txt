@@ -1,0 +1,1474 @@
+Entendido. Voy a profundizar en todo lo que necesitas para que tu negocio sea legal, seguro y funcional al 100%. Te lo entrego en texto plano, seccion por seccion, para que copies y armes tu PDF.
+SECCION 1: CREAR EL PRIMER ADMINISTRADOR EN FIREBASE CONSOLE
+Paso a paso para que solo tu tengas acceso al panel:
+Paso 1: Entra a Firebase Console
+URL: https://console.firebase.google.com
+Inicia sesion con tu cuenta de Google (la que usaras como admin)
+Paso 2: Crea un proyecto nuevo
+Click en "Agregar proyecto"
+Nombre del proyecto: [tu-app-negocios-barrio]
+Desactiva Google Analytics (no lo necesitas ahora)
+Click en "Crear proyecto"
+Paso 3: Activa Firestore Database
+En el menu lateral, click en "Firestore Database"
+Click en "Crear base de datos"
+Selecciona "modo de prueba" por ahora (luego cambiamos a produccion)
+Elige la region: us-central1 (o la mas cercana)
+Paso 4: Activa Authentication
+En el menu lateral, click en "Authentication"
+Click en "Comenzar"
+Activa "Google" como proveedor de inicio de sesion
+Guarda la configuracion
+Paso 5: Crea tu usuario admin manualmente
+Ve a Firestore Database
+Crea una coleccion llamada "administradores"
+Crea un documento con el ID igual a tu UID de Google
+Para obtener tu UID:
+Ve a Authentication > Users
+Inicia sesion una vez con tu Google en la app
+Apareceras en la lista de usuarios
+Copia tu UID (es un string largo como: AbC123XyZ789)
+Paso 6: Crea el documento admin
+Coleccion: administradores
+Documento ID: [tu UID copiado]
+Campos del documento:
+rol: string = "super_admin"
+email: string = "tuemail@gmail.com"
+nombre: string = "Tu Nombre"
+creado: timestamp = [fecha de hoy]
+Paso 7: Configura las Firestore Rules
+Ve a Firestore Database > Rules
+Pega las reglas que te di en la respuesta anterior
+Click en "Publicar"
+Paso 8: Obtén las credenciales de Firebase para tu app
+Ve a Configuracion del proyecto (icono de engranaje)
+Click en "Configuracion"
+En "Tus apps", click en "</>" para crear una app web
+Registra el app con un nickname
+Copia el objeto firebaseConfig que te muestra
+Pega ese objeto en tu archivo firebase-config.js
+Paso 9: Activa Firebase Hosting (para el panel admin)
+Ve a Hosting en el menu lateral
+Click en "Comenzar"
+Sigue las instrucciones para instalar Firebase CLI
+Despliega tu carpeta /admin-panel
+Paso 10: Prueba el login
+Abre tu panel en la URL que te da Firebase Hosting
+Intenta iniciar sesion con tu Google
+Si configuraste bien, entras al dashboard
+Si intentas con otra cuenta Google, te rechaza
+SECCION 2: ESTRUCTURA COMPLETA DE BASE DE DATOS
+Colecciones y documentos que necesitas en Firestore:
+COLECCION: configuracion
+Documento: app
+Campos:
+version: string = "1.0.0"
+ultima_actualizacion: timestamp
+mensaje_bienvenida: string = "Bienvenido a [Tu App]"
+Documento: planes
+Campos:
+prueba: {dias: 30, precio: 0}
+mensual: {dias: 30, precio: 8900}
+trimestral: {dias: 90, precio: 24900}
+semestral: {dias: 180, precio: 47400}
+anual: {dias: 365, precio: 89000}
+COLECCION: licencias
+Documento: LIC-2026-000001
+Campos:
+codigo: string = "A7B9C2D4E1"
+negocio: string = "Almacen Don Pepe"
+rut: string = "12.345.678-9"
+telefono: string = "+56912345678"
+email: string = "donpepe@gmail.com" (opcional)
+direccion: string = "Condell 123, Nunoa" (opcional)
+tipo_plan: string = "anual"
+fecha_inicio: string = "2026-07-22"
+fecha_termino: string = "2027-07-22"
+fecha_pago: string = "2026-07-22"
+monto_pagado: number = 89000
+metodo_pago: string = "transferencia"
+estado: string = "activa" // activa, por_vencer, vencida, suspendida
+notas: string = "Cliente referido por Juan del almacen de la esquina"
+creado_por: string = "admin"
+fecha_creacion: timestamp
+ultima_modificacion: timestamp
+COLECCION: productos
+Documento: auto-generado
+Campos:
+licencia_id: string = "LIC-2026-000001"
+nombre: string = "Coca-Cola 1.5L"
+precio_venta: number = 1290
+precio_compra: number = 860
+stock_actual: number = 8
+stock_minimo: number = 5
+unidad: string = "unidad"
+categoria: string = "bebidas"
+proveedor: string = "Distribuidor A"
+fecha_creacion: timestamp
+COLECCION: ventas
+Documento: auto-generado
+Campos:
+licencia_id: string = "LIC-2026-000001"
+productos: array = [
+{nombre: "Coca-Cola 1.5L", cantidad: 2, precio_unitario: 1290, total: 2580}
+]
+total_venta: number = 2580
+metodo_pago: string = "efectivo" // efectivo, tarjeta, fiado, transferencia
+fecha: timestamp
+numero_boleta: string = "B123456" (opcional)
+COLECCION: fiados
+Documento: auto-generado
+Campos:
+licencia_id: string = "LIC-2026-000001"
+nombre_cliente: string = "Juanito Perez"
+telefono: string = "+56998765432"
+monto_total: number = 4500
+monto_pagado: number = 0
+saldo_pendiente: number = 4500
+estado: string = "pendiente" // pendiente, parcial, pagado
+productos: string = "2 fideos, 1 aceite" (opcional)
+fecha_fiado: timestamp
+fecha_limite: timestamp (opcional)
+recordatorios_enviados: number = 0
+ultimo_recordatorio: timestamp (opcional)
+COLECCION: boletas
+Documento: auto-generado
+Campos:
+licencia_id: string = "LIC-2026-000001"
+numero_boleta: string = "B123456"
+rut_comprador: string = "66.666.666-6" (opcional, para boleta)
+nombre_comprador: string = "Consumidor Final"
+productos: array
+total: number = 2580
+fecha_emision: timestamp
+track_id_sii: string = "..." (respuesta del SII)
+estado_sii: string = "aceptada" // aceptada, rechazada, pendiente
+COLECCION: consentimientos
+Documento: auto-generado
+Campos:
+licencia_id: string = "LIC-2026-000001"
+version_politica: string = "1.0"
+fecha_aceptacion: timestamp
+ip_dispositivo: string = "192.168.1.1"
+dispositivo: string = "Mozilla/5.0 Android..."
+acepto_terminos: boolean = true
+acepto_privacidad: boolean = true
+COLECCION: logs_acceso
+Documento: auto-generado
+Campos:
+licencia_id: string = "LIC-2026-000001"
+tipo: string = "login" // login, venta, fiado, alerta, error
+descripcion: string = "Usuario inicio sesion"
+fecha: timestamp
+dispositivo: string = "Android 14, Samsung A54"
+SECCION 3: CODIGO COMPLETO DEL PANEL ADMINISTRADOR
+HTML: dashboard.html (completo)
+HTML
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Administrador - [Tu App]</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f5f5f5; color: #333; }
+        
+        .header {
+            background: #1a73e8;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 { font-size: 20px; }
+        .header .user-info { display: flex; align-items: center; gap: 15px; }
+        .header button {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 4px solid #1a73e8;
+        }
+        
+        .stat-card.warning { border-left-color: #ffc107; }
+        .stat-card.danger { border-left-color: #dc3545; }
+        .stat-card.success { border-left-color: #28a745; }
+        
+        .stat-card h3 { font-size: 14px; color: #666; margin-bottom: 8px; }
+        .stat-card .stat-number { font-size: 32px; font-weight: bold; color: #333; }
+        
+        .actions-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .btn-primary {
+            background: #1a73e8;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary:hover { background: #1557b0; }
+        
+        .filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .filters input, .filters select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        table {
+            width: 100%;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            color: #666;
+        }
+        
+        tr:hover { background: #f8f9fa; }
+        
+        .estado {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .estado.activa { background: #d4edda; color: #155724; }
+        .estado.por_vencer { background: #fff3cd; color: #856404; }
+        .estado.vencida { background: #f8d7da; color: #721c24; }
+        .estado.suspendida { background: #e2e3e5; color: #383d41; }
+        
+        .btn-small {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+        
+        .btn-edit { background: #ffc107; color: #000; }
+        .btn-renew { background: #28a745; color: white; }
+        .btn-delete { background: #dc3545; color: white; }
+        
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal h2 { margin-bottom: 20px; }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 6px;
+            color: white;
+            display: none;
+            z-index: 2000;
+        }
+        
+        .notification.success { background: #28a745; }
+        .notification.error { background: #dc3545; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Panel de Administracion - [Tu App]</h1>
+        <div class="user-info">
+            <span id="admin-email">admin@email.com</span>
+            <button onclick="cerrarSesion()">Cerrar Sesion</button>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Licencias Activas</h3>
+                <p class="stat-number" id="total-activas">0</p>
+            </div>
+            <div class="stat-card warning">
+                <h3>Por Vencer (7 dias)</h3>
+                <p class="stat-number" id="total-por-vencer">0</p>
+            </div>
+            <div class="stat-card danger">
+                <h3>Vencidas</h3>
+                <p class="stat-number" id="total-vencidas">0</p>
+            </div>
+            <div class="stat-card success">
+                <h3>Ingreso Mensual Est.</h3>
+                <p class="stat-number" id="ingreso-mensual">$0</p>
+            </div>
+        </div>
+        
+        <div class="actions-bar">
+            <h2>Licencias</h2>
+            <button class="btn-primary" onclick="abrirModalNuevaLicencia()">
+                + Crear Nueva Licencia
+            </button>
+        </div>
+        
+        <div class="filters">
+            <input type="text" id="filtro-negocio" placeholder="Buscar por negocio..." onkeyup="filtrarLicencias()">
+            <select id="filtro-estado" onchange="filtrarLicencias()">
+                <option value="todas">Todas</option>
+                <option value="activa">Activas</option>
+                <option value="por_vencer">Por Vencer</option>
+                <option value="vencida">Vencidas</option>
+                <option value="suspendida">Suspendidas</option>
+            </select>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Negocio</th>
+                    <th>Plan</th>
+                    <th>Inicio</th>
+                    <th>Termino</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tbody-licencias">
+                <!-- Se llena con JavaScript -->
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Modal Nueva Licencia -->
+    <div class="modal-overlay" id="modal-licencia">
+        <div class="modal">
+            <h2 id="modal-titulo">Nueva Licencia</h2>
+            <form id="form-licencia">
+                <input type="hidden" id="licencia-id">
+                
+                <div class="form-group">
+                    <label>Nombre del Negocio *</label>
+                    <input type="text" id="negocio" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>RUT del Dueno *</label>
+                    <input type="text" id="rut" placeholder="12.345.678-9" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Telefono (WhatsApp) *</label>
+                    <input type="tel" id="telefono" placeholder="+56912345678" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Correo Electronico</label>
+                    <input type="email" id="email" placeholder="opcional">
+                </div>
+                
+                <div class="form-group">
+                    <label>Direccion del Negocio</label>
+                    <input type="text" id="direccion" placeholder="opcional">
+                </div>
+                
+                <div class="form-group">
+                    <label>Tipo de Plan *</label>
+                    <select id="tipo-plan" required>
+                        <option value="prueba">Prueba Gratis (30 dias)</option>
+                        <option value="mensual">Mensual ($8.900)</option>
+                        <option value="trimestral">Trimestral ($24.900)</option>
+                        <option value="semestral">Semestral ($47.400)</option>
+                        <option value="anual">Anual ($89.000 - 2 meses gratis)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Fecha de Inicio *</label>
+                    <input type="date" id="fecha-inicio" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Monto Pagado *</label>
+                    <input type="number" id="monto-pagado" value="0" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Metodo de Pago</label>
+                    <select id="metodo-pago">
+                        <option value="ninguno">Ninguno (prueba)</option>
+                        <option value="transferencia">Transferencia Bancaria</option>
+                        <option value="efectivo">Efectivo</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Notas</label>
+                    <input type="text" id="notas" placeholder="Observaciones...">
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="cerrarModal()">Cancelar</button>
+                    <button type="submit" class="btn-primary">Guardar Licencia</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification"></div>
+    
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>
+JAVASCRIPT: dashboard.js (completo)
+JavaScript
+// ============================================================
+// CONFIGURACION FIREBASE
+// ============================================================
+
+const firebaseConfig = {
+    apiKey: "TU_API_KEY",
+    authDomain: "tuproject.firebaseapp.com",
+    projectId: "tuproject",
+    storageBucket: "tuproject.appspot.com",
+    messagingSenderId: "123456789",
+    appId: "1:123456789:web:abcdef"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+let licenciasData = []; // Cache de licencias
+let adminUid = null;
+
+// ============================================================
+// AUTENTICACION
+// ============================================================
+
+// Verificar admin al cargar
+auth.onAuthStateChanged(async (user) => {
+    if (!user) {
+        window.location.href = 'index.html';
+        return;
+    }
+    
+    // Verificar que sea admin
+    const adminDoc = await db.collection('administradores').doc(user.uid).get();
+    if (!adminDoc.exists || adminDoc.data().rol !== 'super_admin') {
+        await auth.signOut();
+        window.location.href = 'index.html';
+        return;
+    }
+    
+    adminUid = user.uid;
+    document.getElementById('admin-email').textContent = user.email;
+    
+    // Cargar datos
+    await cargarResumen();
+    await cargarLicencias();
+});
+
+function cerrarSesion() {
+    auth.signOut();
+}
+
+// ============================================================
+// RESUMEN DEL DASHBOARD
+// ============================================================
+
+async function cargarResumen() {
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    
+    const sieteDias = new Date(hoy);
+    sieteDias.setDate(sieteDias.getDate() + 7);
+    
+    try {
+        const snapshot = await db.collection('licencias').get();
+        
+        let activas = 0;
+        let porVencer = 0;
+        let vencidas = 0;
+        let ingresoMensual = 0;
+        
+        snapshot.forEach(doc => {
+            const lic = doc.data();
+            const fechaTermino = lic.fecha_termino ? new Date(lic.fecha_termino) : null;
+            
+            // Actualizar estado si esta vencida
+            if (fechaTermino && fechaTermino < hoy && lic.estado !== 'vencida') {
+                db.collection('licencias').doc(doc.id).update({ estado: 'vencida' });
+                lic.estado = 'vencida';
+            }
+            
+            if (lic.estado === 'activa') {
+                activas++;
+                
+                // Calcular ingreso mensual equivalente
+                switch(lic.tipo_plan) {
+                    case 'mensual': ingresoMensual += 8900; break;
+                    case 'trimestral': ingresoMensual += 8300; break; // 24900/3
+                    case 'semestral': ingresoMensual += 7900; break; // 47400/6
+                    case 'anual': ingresoMensual += 7417; break; // 89000/12
+                }
+                
+                if (fechaTermino && fechaTermino <= sieteDias && fechaTermino >= hoy) {
+                    porVencer++;
+                }
+            }
+            
+            if (lic.estado === 'vencida') {
+                vencidas++;
+            }
+        });
+        
+        document.getElementById('total-activas').textContent = activas;
+        document.getElementById('total-por-vencer').textContent = porVencer;
+        document.getElementById('total-vencidas').textContent = vencidas;
+        document.getElementById('ingreso-mensual').textContent = '$' + ingresoMensual.toLocaleString('es-CL');
+        
+    } catch (error) {
+        console.error('Error cargando resumen:', error);
+        mostrarNotificacion('Error al cargar datos', 'error');
+    }
+}
+
+// ============================================================
+// CRUD DE LICENCIAS
+// ============================================================
+
+async function cargarLicencias() {
+    try {
+        const snapshot = await db.collection('licencias')
+            .orderBy('fecha_creacion', 'desc')
+            .get();
+        
+        licenciasData = [];
+        const tbody = document.getElementById('tbody-licencias');
+        tbody.innerHTML = '';
+        
+        snapshot.forEach(doc => {
+            const lic = doc.data();
+            lic.id = doc.id;
+            licenciasData.push(lic);
+            
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${lic.id}</td>
+                <td>${lic.negocio || '-'}</td>
+                <td>${lic.tipo_plan || '-'}</td>
+                <td>${formatearFecha(lic.fecha_inicio)}</td>
+                <td>${formatearFecha(lic.fecha_termino)}</td>
+                <td><span class="estado ${lic.estado}">${lic.estado}</span></td>
+                <td>
+                    <button class="btn-small btn-edit" onclick="editarLicencia('${lic.id}')">Editar</button>
+                    <button class="btn-small btn-renew" onclick="renovarLicencia('${lic.id}')">Renovar</button>
+                    <button class="btn-small btn-delete" onclick="eliminarLicencia('${lic.id}')">Eliminar</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+        
+    } catch (error) {
+        console.error('Error cargando licencias:', error);
+        mostrarNotificacion('Error al cargar licencias', 'error');
+    }
+}
+
+// ============================================================
+// CREAR NUEVA LICENCIA
+// ============================================================
+
+function abrirModalNuevaLicencia() {
+    document.getElementById('modal-titulo').textContent = 'Nueva Licencia';
+    document.getElementById('form-licencia').reset();
+    document.getElementById('licencia-id').value = '';
+    document.getElementById('fecha-inicio').value = new Date().toISOString().split('T')[0];
+    document.getElementById('modal-licencia').style.display = 'flex';
+}
+
+function cerrarModal() {
+    document.getElementById('modal-licencia').style.display = 'none';
+}
+
+document.getElementById('form-licencia').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const licenciaId = document.getElementById('licencia-id').value;
+    
+    if (licenciaId) {
+        await actualizarLicencia(licenciaId);
+    } else {
+        await crearNuevaLicencia();
+    }
+});
+
+async function crearNuevaLicencia() {
+    try {
+        // Generar ID secuencial
+        const contadorRef = db.collection('config').doc('contador');
+        const contadorDoc = await contadorRef.get();
+        
+        let nuevoNumero = 1;
+        if (contadorDoc.exists) {
+            nuevoNumero = contadorDoc.data().ultimo_numero + 1;
+            await contadorRef.update({ 
+                ultimo_numero: nuevoNumero,
+                ultima_actualizacion: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } else {
+            await contadorRef.set({ 
+                ultimo_numero: 1,
+                ultima_actualizacion: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        }
+        
+        const licenciaId = `LIC-2026-${String(nuevoNumero).padStart(6, '0')}`;
+        const codigo = generarCodigoAleatorio(10);
+        
+        // Calcular fechas
+        const tipoPlan = document.getElementById('tipo-plan').value;
+        const fechaInicio = new Date(document.getElementById('fecha-inicio').value);
+        const fechaTermino = new Date(fechaInicio);
+        
+        switch(tipoPlan) {
+            case 'prueba': fechaTermino.setDate(fechaTermino.getDate() + 30); break;
+            case 'mensual': fechaTermino.setDate(fechaTermino.getDate() + 30); break;
+            case 'trimestral': fechaTermino.setDate(fechaTermino.getDate() + 90); break;
+            case 'semestral': fechaTermino.setDate(fechaTermino.getDate() + 180); break;
+            case 'anual': fechaTermino.setDate(fechaTermino.getDate() + 365); break;
+        }
+        
+        const nuevaLicencia = {
+            codigo: codigo,
+            negocio: document.getElementById('negocio').value.trim(),
+            rut: document.getElementById('rut').value.trim(),
+            telefono: document.getElementById('telefono').value.trim(),
+            email: document.getElementById('email').value.trim() || null,
+            direccion: document.getElementById('direccion').value.trim() || null,
+            tipo_plan: tipoPlan,
+            fecha_inicio: fechaInicio.toISOString().split('T')[0],
+            fecha_termino: fechaTermino.toISOString().split('T')[0],
+            fecha_pago: document.getElementById('monto-pagado').value > 0 
+                ? new Date().toISOString().split('T')[0] 
+                : null,
+            monto_pagado: parseInt(document.getElementById('monto-pagado').value) || 0,
+            metodo_pago: document.getElementById('metodo-pago').value,
+            estado: 'activa',
+            notas: document.getElementById('notas').value.trim() || null,
+            creado_por: adminUid,
+            fecha_creacion: firebase.firestore.FieldValue.serverTimestamp(),
+            ultima_modificacion: firebase.firestore.FieldValue.serverTimestamp()
+        };
+        
+        await db.collection('licencias').doc(licenciaId).set(nuevaLicencia);
+        
+        cerrarModal();
+        await cargarResumen();
+        await cargarLicencias();
+        
+        mostrarNotificacion(`Licencia ${licenciaId} creada. Codigo: ${codigo}`, 'success');
+        
+        // Opcional: enviar codigo por WhatsApp
+        enviarCodigoWhatsApp(nuevaLicencia.telefono, codigo, nuevaLicencia.negocio);
+        
+    } catch (error) {
+        console.error('Error creando licencia:', error);
+        mostrarNotificacion('Error al crear licencia', 'error');
+    }
+}
+
+function generarCodigoAleatorio(longitud) {
+    const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let resultado = '';
+    for (let i = 0; i < longitud; i++) {
+        resultado += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+    }
+    return resultado;
+}
+
+// ============================================================
+// EDITAR, RENOVAR Y ELIMINAR LICENCIAS
+// ============================================================
+
+async function editarLicencia(id) {
+    const lic = licenciasData.find(l => l.id === id);
+    if (!lic) return;
+    
+    document.getElementById('modal-titulo').textContent = 'Editar Licencia';
+    document.getElementById('licencia-id').value = id;
+    document.getElementById('negocio').value = lic.negocio || '';
+    document.getElementById('rut').value = lic.rut || '';
+    document.getElementById('telefono').value = lic.telefono || '';
+    document.getElementById('email').value = lic.email || '';
+    document.getElementById('direccion').value = lic.direccion || '';
+    document.getElementById('tipo-plan').value = lic.tipo_plan || 'mensual';
+    document.getElementById('fecha-inicio').value = lic.fecha_inicio || '';
+    document.getElementById('monto-pagado').value = lic.monto_pagado || 0;
+    document.getElementById('metodo-pago').value = lic.metodo_pago || 'ninguno';
+    document.getElementById('notas').value = lic.notas || '';
+    
+    document.getElementById('modal-licencia').style.display = 'flex';
+}
+
+async function actualizarLicencia(id) {
+    try {
+        const tipoPlan = document.getElementById('tipo-plan').value;
+        const fechaInicio = new Date(document.getElementById('fecha-inicio').value);
+        const fechaTermino = new Date(fechaInicio);
+        
+        switch(tipoPlan) {
+            case 'prueba': fechaTermino.setDate(fechaTermino.getDate() + 30); break;
+            case 'mensual': fechaTermino.setDate(fechaTermino.getDate() + 30); break;
+            case 'trimestral': fechaTermino.setDate(fechaTermino.getDate() + 90); break;
+            case 'semestral': fechaTermino.setDate(fechaTermino.getDate() + 180); break;
+            case 'anual': fechaTermino.setDate(fechaTermino.getDate() + 365); break;
+        }
+        
+        const actualizacion = {
+            negocio: document.getElementById('negocio').value.trim(),
+            rut: document.getElementById('rut').value.trim(),
+            telefono: document.getElementById('telefono').value.trim(),
+            email: document.getElementById('email').value.trim() || null,
+            direccion: document.getElementById('direccion').value.trim() || null,
+            tipo_plan: tipoPlan,
+            fecha_inicio: fechaInicio.toISOString().split('T')[0],
+            fecha_termino: fechaTermino.toISOString().split('T')[0],
+            monto_pagado: parseInt(document.getElementById('monto-pagado').value) || 0,
+            metodo_pago: document.getElementById('metodo-pago').value,
+            notas: document.getElementById('notas').value.trim() || null,
+            ultima_modificacion: firebase.firestore.FieldValue.serverTimestamp()
+        };
+        
+        await db.collection('licencias').doc(id).update(actualizacion);
+        
+        cerrarModal();
+        await cargarResumen();
+        await cargarLicencias();
+        mostrarNotificacion('Licencia actualizada', 'success');
+        
+    } catch (error) {
+        console.error('Error actualizando licencia:', error);
+        mostrarNotificacion('Error al actualizar', 'error');
+    }
+}
+
+async function renovarLicencia(id) {
+    const lic = licenciasData.find(l => l.id === id);
+    if (!lic) return;
+    
+    const confirmar = confirm(`¿Renovar licencia ${id} - ${lic.negocio}?`);
+    if (!confirmar) return;
+    
+    try {
+        const fechaTerminoActual = new Date(lic.fecha_termino);
+        const nuevaFechaTermino = new Date(fechaTerminoActual);
+        
+        switch(lic.tipo_plan) {
+            case 'mensual': nuevaFechaTermino.setDate(nuevaFechaTermino.getDate() + 30); break;
+            case 'trimestral': nuevaFechaTermino.setDate(nuevaFechaTermino.getDate() + 90); break;
+            case 'semestral': nuevaFechaTermino.setDate(nuevaFechaTermino.getDate() + 180); break;
+            case 'anual': nuevaFechaTermino.setDate(nuevaFechaTermino.getDate() + 365); break;
+        }
+        
+        await db.collection('licencias').doc(id).update({
+            fecha_termino: nuevaFechaTermino.toISOString().split('T')[0],
+            estado: 'activa',
+            fecha_pago: new Date().toISOString().split('T')[0],
+            ultima_modificacion: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+        await cargarResumen();
+        await cargarLicencias();
+        mostrarNotificacion('Licencia renovada exitosamente', 'success');
+        
+    } catch (error) {
+        console.error('Error renovando licencia:', error);
+        mostrarNotificacion('Error al renovar', 'error');
+    }
+}
+
+async function eliminarLicencia(id) {
+    const lic = licenciasData.find(l => l.id === id);
+    if (!lic) return;
+    
+    const confirmar = confirm(`¿Eliminar permanentemente la licencia ${id} - ${lic.negocio}? Esta accion no se puede deshacer.`);
+    if (!confirmar) return;
+    
+    try {
+        await db.collection('licencias').doc(id).delete();
+        await cargarResumen();
+        await cargarLicencias();
+        mostrarNotificacion('Licencia eliminada', 'success');
+        
+    } catch (error) {
+        console.error('Error eliminando licencia:', error);
+        mostrarNotificacion('Error al eliminar', 'error');
+    }
+}
+
+// ============================================================
+// FILTROS Y UTILIDADES
+// ============================================================
+
+function filtrarLicencias() {
+    const filtroNegocio = document.getElementById('filtro-negocio').value.toLowerCase();
+    const filtroEstado = document.getElementById('filtro-estado').value;
+    
+    const tbody = document.getElementById('tbody-licencias');
+    tbody.innerHTML = '';
+    
+    const filtradas = licenciasData.filter(lic => {
+        const coincideNegocio = !filtroNegocio || (lic.negocio && lic.negocio.toLowerCase().includes(filtroNegocio));
+        const coincideEstado = filtroEstado === 'todas' || lic.estado === filtroEstado;
+        return coincideNegocio && coincideEstado;
+    });
+    
+    filtradas.forEach(lic => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${lic.id}</td>
+            <td>${lic.negocio || '-'}</td>
+            <td>${lic.tipo_plan || '-'}</td>
+            <td>${formatearFecha(lic.fecha_inicio)}</td>
+            <td>${formatearFecha(lic.fecha_termino)}</td>
+            <td><span class="estado ${lic.estado}">${lic.estado}</span></td>
+            <td>
+                <button class="btn-small btn-edit" onclick="editarLicencia('${lic.id}')">Editar</button>
+                <button class="btn-small btn-renew" onclick="renovarLicencia('${lic.id}')">Renovar</button>
+                <button class="btn-small btn-delete" onclick="eliminarLicencia('${lic.id}')">Eliminar</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function formatearFecha(fechaString) {
+    if (!fechaString) return '-';
+    const fecha = new Date(fechaString);
+    return fecha.toLocaleDateString('es-CL', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    });
+}
+
+function mostrarNotificacion(mensaje, tipo) {
+    const notif = document.getElementById('notification');
+    notif.textContent = mensaje;
+    notif.className = 'notification ' + tipo;
+    notif.style.display = 'block';
+    
+    setTimeout(() => {
+        notif.style.display = 'none';
+    }, 4000);
+}
+
+// Cerrar modal al hacer click fuera
+document.getElementById('modal-licencia').addEventListener('click', (e) => {
+    if (e.target.id === 'modal-licencia') {
+        cerrarModal();
+    }
+});
+
+// Enviar codigo por WhatsApp (integracion con API)
+function enviarCodigoWhatsApp(telefono, codigo, negocio) {
+    const mensaje = `Hola ${negocio}! Su licencia ha sido creada exitosamente.\n\nCodigo de activacion: ${codigo}\n\nIngreselo en la aplicacion para comenzar a usarla.\n\nSi tiene dudas, escribanos por aqui.`;
+    
+    // Abre WhatsApp Web con mensaje pre-escrito (metodo manual)
+    const url = `https://wa.me/${telefono.replace('+', '')}?text=${encodeURIComponent(mensaje)}`;
+    window.open(url, '_blank');
+    
+    // Para envio automatico, integrar con API de WhatsApp Business:
+    // Wati, 360dialog, o Meta Business API
+}
+SECCION 4: APP DEL CLIENTE (PWA) - ESTRUCTURA COMPLETA
+Estructura de archivos:
+plain
+/app-cliente/
+  index.html          (pantalla de activacion/login)
+  app.html            (app principal despues de activar)
+  css/
+    styles.css
+  js/
+    firebase-config.js
+    verificador-licencia.js
+    app.js
+    inventario.js
+    fiados.js
+    ventas.js
+    boletas.js
+    resumen.js
+  manifest.json
+  sw.js               (service worker para PWA)
+manifest.json (para que se instale como app)
+JSON
+{
+  "name": "[Tu App] - Gestión para Negocios",
+  "short_name": "[Tu App]",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1a73e8",
+  "icons": [
+    {
+      "src": "icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+Pantalla de activacion (index.html)
+HTML
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido - [Tu App]</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: #1a73e8;
+            border-radius: 20px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 36px;
+            font-weight: bold;
+        }
+        h1 { color: #333; margin-bottom: 10px; font-size: 24px; }
+        p { color: #666; margin-bottom: 30px; }
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            text-align: center;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: #1a73e8;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover { background: #1557b0; }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .error {
+            color: #dc3545;
+            margin-top: 15px;
+            font-size: 14px;
+            display: none;
+        }
+        .success {
+            color: #28a745;
+            margin-top: 15px;
+            font-size: 14px;
+            display: none;
+        }
+        .loading {
+            display: none;
+            margin-top: 15px;
+        }
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid #e0e0e0;
+            border-top-color: #1a73e8;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">[A]</div>
+        <h1>[Tu App]</h1>
+        <p>Gestion inteligente para tu negocio</p>
+        
+        <div class="input-group">
+            <label for="codigo-licencia">Ingrese su codigo de activacion</label>
+            <input 
+                type="text" 
+                id="codigo-licencia" 
+                placeholder="A7B9C2D4E1"
+                maxlength="10"
+                autocomplete="off"
+            >
+        </div>
+        
+        <button id="btn-activar" onclick="activarLicencia()">
+            Activar Licencia
+        </button>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p style="margin-top:10px; color:#666;">Verificando licencia...</p>
+        </div>
+        
+        <p class="error" id="mensaje-error"></p>
+        <p class="success" id="mensaje-exito"></p>
+        
+        <p style="margin-top: 30px; font-size: 12px; color: #999;">
+            ¿No tiene codigo? Contacte a su asesor por WhatsApp
+        </p>
+    </div>
+    
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/verificador-licencia.js"></script>
+    <script>
+        async function activarLicencia() {
+            const codigo = document.getElementById('codigo-licencia').value.trim().toUpperCase();
+            const btn = document.getElementById('btn-activar');
+            const loading = document.getElementById('loading');
+            const error = document.getElementById('mensaje-error');
+            const exito = document.getElementById('mensaje-exito');
+            
+            // Reset mensajes
+            error.style.display = 'none';
+            exito.style.display = 'none';
+            
+            if (codigo.length !== 10) {
+                error.textContent = 'El codigo debe tener 10 caracteres';
+                error.style.display = 'block';
+                return;
+            }
+            
+            btn.disabled = true;
+            loading.style.display = 'block';
+            
+            const verificador = new VerificadorLicencia();
+            const resultado = await verificador.activarLicencia(codigo);
+            
+            loading.style.display = 'none';
+            btn.disabled = false;
+            
+            if (resultado.valida) {
+                exito.textContent = 'Licencia activada correctamente. Redirigiendo...';
+                exito.style.display = 'block';
+                
+                setTimeout(() => {
+                    window.location.href = 'app.html';
+                }, 1500);
+            } else {
+                error.textContent = resultado.mensaje;
+                error.style.display = 'block';
+            }
+        }
+        
+        // Permitir Enter para activar
+        document.getElementById('codigo-licencia').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') activarLicencia();
+        });
+        
+        // Verificar si ya hay licencia activa
+        window.addEventListener('load', async () => {
+            const verificador = new VerificadorLicencia();
+            const resultado = await verificador.verificarLicencia();
+            
+            if (resultado.valida) {
+                window.location.href = 'app.html';
+            }
+        });
+    </script>
+</body>
+</html>
+SECCION 5: CHECKLIST LEGAL PARA LANZAR EN CHILE
+Antes de que cualquier cliente use tu app, debes cumplir:
+DOCUMENTOS REQUERIDOS
+[ ] Politica de Privacidad (ya te la di arriba)
+[ ] Terminos de Servicio
+[ ] Registro de Actividades de Tratamiento (RAT)
+[ ] Consentimiento informado en la app (pantalla inicial)
+TERMINOS DE SERVICIO (texto basico)
+plain
+TERMINOS DE SERVICIO
+
+1. OBJETO
+[Tu App] es una aplicacion de software para la gestion de inventario, fiados y facturacion electronica de negocios de barrio.
+
+2. CONDICIONES DE USO
+El usuario debe ser mayor de 18 anos y ser dueno o administrador autorizado del negocio registrado.
+
+3. LICENCIA DE USO
+Se otorga una licencia no exclusiva, intransferible y revocable para usar la aplicacion durante el periodo contratado.
+
+4. PAGO
+El usuario se compromete a pagar el monto correspondiente al plan seleccionado. La falta de pago resultara en la suspension del servicio.
+
+5. RESPONSABILIDAD
+El usuario es responsable de la veracidad de los datos ingresados. No nos hacemos responsables por errores en la emision de documentos tributarios derivados de datos incorrectos proporcionados por el usuario.
+
+6. SOPORTE
+El soporte tecnico se brinda via WhatsApp en horario habil. No garantizamos respuesta inmediata fuera de horario.
+
+7. MODIFICACIONES
+Nos reservamos el derecho de modificar estos terminos con previo aviso de 30 dias.
+
+8. TERMINACION
+Podemos suspender o terminar el servicio por incumplimiento de estos terminos o por falta de pago.
+
+9. LEY APLICABLE
+Estos terminos se rigen por las leyes de la Republica de Chile.
+
+10. CONTACTO
+WhatsApp: +569XXXXXXXX
+Correo: [tuemail@gmail.com]
+REGISTRO DE ACTIVIDADES DE TRATAMIENTO (RAT) - Plantilla
+plain
+REGISTRO DE ACTIVIDADES DE TRATAMIENTO
+
+Responsable: [Tu nombre/RUT]
+Fecha de elaboracion: [Hoy]
+
+ACTIVIDAD 1: Gestion de cuentas de usuarios
+- Datos tratados: Nombre, RUT, telefono, email
+- Categoria de datos: Datos personales basicos
+- Finalidad: Crear y gestionar cuentas de acceso
+- Base legal: Consentimiento del titular
+- Medio de recoleccion: Formulario en aplicacion
+- Categoria de titulares: Duenos de negocios de barrio
+- Transferencia internacional: Si, a servidores de Google en Estados Unidos
+- Plazo de conservacion: Durante la relacion contractual + 2 anos
+- Medidas de seguridad: Encriptacion, control de acceso, autenticacion
+
+ACTIVIDAD 2: Gestion de inventario
+- Datos tratados: Datos de productos, precios, stock
+- Categoria de datos: Datos comerciales
+- Finalidad: Permitir control de inventario al usuario
+- Base legal: Ejecucion de contrato
+- Medio de recoleccion: Ingreso directo por el usuario
+- Categoria de titulares: N/A (datos del propio negocio)
+- Transferencia internacional: Si, a servidores de Google
+- Plazo de conservacion: Durante la relacion contractual + 1 ano
+- Medidas de seguridad: Encriptacion, control de acceso
+
+ACTIVIDAD 3: Registro de fiados
+- Datos tratados: Nombre de deudores, montos, telefonos
+- Categoria de datos: Datos personales basicos
+- Finalidad: Gestion interna de credito del negocio
+- Base legal: Interes legitimo del negocio
+- Medio de recoleccion: Ingreso directo por el usuario
+- Categoria de titulares: Clientes finales de los negocios
+- Transferencia internacional: Si, a servidores de Google
+- Plazo de conservacion: Durante la existencia de la deuda + 1 ano
+- Medidas de seguridad: Encriptacion, control de acceso
+
+ACTIVIDAD 4: Emision de boletas electronicas
+- Datos tratados: Datos de compradores finales (nombre, RUT)
+- Categoria de datos: Datos personales basicos
+- Finalidad: Cumplimiento de obligacion legal tributaria
+- Base legal: Obligacion legal (SII)
+- Medio de recoleccion: Ingreso en punto de venta
+- Categoria de titulares: Compradores finales
+- Transferencia internacional: No, datos enviados directamente al SII
+- Plazo de conservacion: 6 anos (plazo legal SII)
+- Medidas de seguridad: Encriptacion, transmision segura
+
+ACTIVIDAD 5: Envio de notificaciones
+- Datos tratados: Telefono, datos de transacciones
+- Categoria de datos: Datos personales basicos
+- Finalidad: Enviar alertas de stock y recordatorios de fiado
+- Base legal: Consentimiento del titular
+- Medio de recoleccion: Generados automaticamente por el sistema
+- Categoria de titulares: Duenos de negocios y deudores
+- Transferencia internacional: No, envio directo via WhatsApp API
+- Plazo de conservacion: Durante la vigencia de la licencia
+- Medidas de seguridad: APIs seguras, logs de envio
+SECCION 6: FLUJO COMPLETO DE VENTA PUERTA A PUERTA CON SISTEMA DE LICENCIAS
+Dia 1: Visita al negocio
+Tu llegas al almacen de Don Pepe.
+TU: "Don Pepe, buenas tardes. Vengo del almacen de la esquina de Condell. Le instale un sistema para que nunca mas se le acaben las Coca-Cola los fines de semana y le cobre automatico por WhatsApp a los que le deben. Me dijo que le esta funcionando. ¿Me da 2 minutos para mostrarle como funciona?"
+Don Pepe te da los 2 minutos.
+TU: (Muestras tu celular con la app funcionando con datos anonimizados)
+"Mire, Don Pepe. Aqui esta el inventario. Le quedan 3 Coca-Cola. La app le avisa automatico cuando se le acaba. Y aqui estan los fiados: Juanito le debe $4.500 hace 5 dias. Con un toque, le llega este mensaje por WhatsApp: 'Hola Juanito, le recuerdo que tiene $4.500 pendiente...'"
+Don Pepe: "Y cuanto cuesta?"
+TU: "Bsale le cuesta casi $100.000 al mes. Defontana, $70.000. Y eso es para negocios grandes con contador. Yo le propongo algo pensado para el almacen de barrio: le ayudo a no quedarse sin stock, le cobro el fiado automatico por WhatsApp, y le emito la boleta al SII. Todo por $8.900 al mes, IVA incluido. O si se queda el ano completo, le regalo 2 meses. Le sale $89.000 por todo el ano. Pero el primer mes es gratis para que lo pruebe. Si no le sirve, no paga nada."
+Don Pepe: "Me interesa."
+TU: "Perfecto. Le voy a crear su licencia de prueba ahora mismo. Necesito su nombre completo, RUT y telefono para WhatsApp."
+Don Pepe te da los datos.
+TU: (Abres tu panel admin en tu celular)
+"Aqui estoy creando su licencia... listo. Su codigo es A7B9C2D4E1. Se lo envio por WhatsApp ahora mismo."
+(Tomas la configuracion de sus 20 productos mas vendidos en 30 minutos)
+TU: "Don Pepe, ya esta todo listo. Le envie el codigo por WhatsApp. Cuando abra la app, lo ingresa y listo. Yo le paso el lunes a ver como le va. Cualquier duda, me escribe por WhatsApp."
+Dia 2-7: Seguimiento por WhatsApp
+"Miercoles 10:00 AM: Hola Don Pepe, ¿le llego la alerta de los fideos esta mañana?"
+"Viernes 3:00 PM: Don Pepe, vi que registro 2 fiados esta semana. ¿Le funciono el envio de recordatorio?"
+Dia 25: Recordatorio de vencimiento
+"Hola Don Pepe, su prueba termina en 5 dias. ¿Le sirvio la app? Le sirvio lo de las alertas de stock?"
+Si dice que si:
+"Me alegro Don Pepe. ¿Se queda con el plan mensual a $8.900 o prefiere el ano completo a $89.000 con 2 meses gratis?"
+Si paga:
+(Abres panel admin, editas la licencia, cambias a plan mensual o anual, actualizas fecha de termino, registras pago)
+"Listo Don Pepe, su licencia esta activa hasta [fecha]. Gracias por la confianza!"
+SECCION 7: PREGUNTAS FRECUENTES PARA CLIENTES
+P: ¿Y si se me acaba el internet en el negocio?
+R: La app funciona sin internet hasta por 7 dias. Cuando vuelva el internet, se sincroniza todo automatico.
+P: ¿Mis datos estan seguros?
+R: Si, se guardan en servidores de Google con encriptacion. Nadie mas puede verlos.
+P: ¿Y si quiero dejar de usarla?
+R: Puede cancelar cuando quiera. Sus datos se eliminan en 30 dias.
+P: ¿Puedo usarla en mas de un celular?
+R: La licencia es para un celular. Si cambia de telefono, me avisa y se la transfiero sin costo.
+P: ¿Que pasa si olvido pagar?
+R: Le aviso 5 dias antes por WhatsApp. Si se atrasa, le doy 7 dias de gracia. Despues la app se pausa hasta que pague.
+P: ¿La boleta electronica es legal?
+R: Si, se emite directamente al SII. Es una boleta valida igual que la de Bsale o cualquier otro sistema.
+SECCION 8: MIGRACION DE FIREBASE A SUPABASE (OPCIONAL, PARA CUMPLIR LEY DE DATOS)
+Si quieres evitar el problema de transferencia internacional a Estados Unidos:
+Paso 1: Crea cuenta en Supabase
+URL: https://supabase.com
+Crea proyecto nuevo, selecciona region: Sao Paulo (sa-east-1) o Sudamerica
+Paso 2: Configura la base de datos PostgreSQL
+Las tablas son similares a las colecciones de Firestore
+Paso 3: Activa Row Level Security (RLS)
+Equivalente a Firestore Rules
+Paso 4: Migra los datos
+Exporta de Firebase, importa a Supabase
+Paso 5: Actualiza tu app
+Cambia la configuracion de Firebase por Supabase
+Ventaja: Datos en Sudamerica, cumplimiento mas facil de la Ley 21.719
+Desventaja: Curva de aprendizaje, menos documentacion en espanol
+Recomendacion: Empieza con Firebase (mas facil, mas documentacion). Si creces a 100+ clientes y la APDP empieza a fiscalizar fuerte, migra a Supabase.
+SECCION 9: PRESUPUESTO TOTAL PARA LANZAR
+Costos fijos mensuales (con 0-10 clientes):
+Hojas
+Servicio	Costo mensual
+Firebase (gratis)	$0
+API Facturacion SII	$3.000 - $5.000
+API WhatsApp	$2.000 - $4.000
+API OCR (Google Vision)	$1.000 - $2.000
+Dominio web	$1.000
+Total	$7.000 - $12.000
+Costos de desarrollo (si contratas freelance):
+Hojas
+Descripcion	Costo estimado
+MVP completo (10 sem)	$800.000 - $1.500.000
+Panel admin	Incluido en MVP
+App cliente PWA	Incluido en MVP
+Integracion SII	Incluido en MVP
+Integracion WhatsApp	Incluido en MVP
+OCR por foto	Incluido en MVP
+Pruebas y ajustes	Incluido en MVP
+Costos de desarrollo (si lo haces tu solo):
+Hojas
+Descripcion	Costo estimado
+Tu tiempo	10 semanas medio tiempo
+Cursos online (opcional)	$0 - $50.000
+Total	$0 - $50.000 + tu tiempo
+Ingreso necesario para break-even:
+Hojas
+Clientes	Ingreso mensual	Cubre costos?
+1	$8.900	No (pierdes ~$3.000)
+2	$17.800	Casi
+3	$26.700	Si, con margen pequeno
+10	$89.000	Si, margen comodo
+20	$178.000	Si, negocio viable
+SECCION 10: CRONOGRAMA DE 12 SEMANAS PARA LANZAR
+Semana 1-2: Fundamentos
+Crear cuenta Firebase
+Configurar Firestore y Auth
+Crear tu usuario admin
+Escribir Politica de Privacidad
+Escribir Terminos de Servicio
+Crear RAT
+Semana 3-4: Panel Administrador
+Desarrollar login con Google
+Desarrollar dashboard
+Desarrollar CRUD de licencias
+Probar creacion de licencias
+Semana 5-6: App Cliente - Activacion
+Pantalla de ingreso de codigo
+Verificacion de licencia online
+Verificacion de licencia offline
+Guardar datos locales
+Semana 7-8: App Cliente - Funciones Core
+Registro de productos
+Alerta de stock bajo
+Registro de fiados
+Resumen diario
+Semana 9: App Cliente - Facturacion
+Emision de boleta SII
+Integracion con API de facturacion
+Historial de boletas
+Semana 10: App Cliente - OCR y WhatsApp
+Ingreso de pedido por foto
+Envio de recordatorios de fiado
+Resumen diario por WhatsApp
+Semana 11: Pruebas
+Instalar en 2 negocios de tu barrio
+Probar todas las funciones
+Corregir bugs
+Ajustar segun feedback
+Semana 12: Preparacion para venta
+Crear pitch de venta
+Imprimir tarjetas de presentacion (opcional)
+Definir territorio de venta
+Salir a vender
+Eso es todo lo que necesitas para tener un sistema legal, seguro y funcional al 100%.
+¿Quieres que profundice en alguna seccion especifica, o que te ayude con el codigo de alguna funcion en particular, o que pasemos a estrategias de marketing y venta puerta a puerta?
+
+
