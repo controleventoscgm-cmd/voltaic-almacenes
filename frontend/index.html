@@ -56,48 +56,41 @@
         .chat-input-area { padding: 15px; border-top: 1px solid var(--border-subtle); display: flex; gap: 10px; }
         .chat-input-area input { flex-grow: 1; }
         
-        /* CSS MÓVIL OPTIMIZADO */
+        /* CSS MÓVIL: MENÚ HAMBURGUESA */
+        .hamburger-btn, .overlay { display: none; }
         @media (max-width: 768px) { 
             body { overflow-y: auto; height: auto; }
-            html, body { height: auto; min-height: 100%; }
             .app-layout { display: block; min-height: 100vh; } 
+            .hamburger-btn {
+                display: flex; position: fixed; top: 15px; right: 15px; z-index: 2000;
+                background: var(--accent-blue); color: white; width: 45px; height: 45px; border-radius: 10px; font-size: 22px; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            }
+            .overlay { display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1500; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+            .overlay.active { opacity: 1; pointer-events: auto; }
             .sidebar {
-                position: fixed; bottom: 0; left: 0; right: 0;
-                width: 100%; height: 60px;
-                flex-direction: row; padding: 0;
-                border-right: none; border-top: 1px solid var(--border-subtle);
-                z-index: 1000; background: var(--bg-sidebar);
-                display: flex; align-items: center; justify-content: space-around;
+                position: fixed; top: 0; left: -260px; width: 240px; height: 100vh; z-index: 2000; transition: left 0.3s ease;
             } 
-            .sidebar-header, .tenant-selector { display: none; } 
-            .sidebar-nav { flex-direction: row; width: 100%; height: 100%; justify-content: space-around; align-items: center; } 
-            .nav-section { display: none; flex-direction: row; margin: 0; height: 100%; align-items: center; width: 100%; justify-content: space-around; }
-            #setupNav, #navConnected { display: none !important; }
-            #setupNav[style*="block"], #navConnected[style*="block"] { display: flex !important; }
-            
-            .nav-title { display: none; } 
-            .nav-item { flex-direction: column; gap: 2px; font-size: 0; padding: 8px 4px; margin: 0; flex: 1; justify-content: center; height: 100%; } 
-            .nav-item span { display: none; }
-            .nav-item svg { width: 22px; height: 22px; }
-            .nav-item.danger { margin-top: 0; border-top: none; padding-top: 0; } 
-
+            .sidebar.active { left: 0; } 
             .main-content {
-                padding: 20px 16px 80px 16px; 
-                height: auto; overflow-y: visible;
+                padding: 70px 16px 30px 16px; height: auto; overflow-y: visible;
             } 
             .content-header { margin-bottom: 24px; } 
             .content-header h1 { font-size: 20px; } 
             .form-grid { grid-template-columns: 1fr; gap: 0; } 
             .card-glass { padding: 16px; } 
             .list-item, .list-header { padding: 12px 16px; font-size: 13px; } 
-            .chat-float { bottom: 75px; right: 15px; width: 50px; height: 50px; font-size: 20px; z-index: 1500; }
-            .chat-box { bottom: 140px; right: 10px; width: calc(100% - 20px); height: 70vh; z-index: 1500; }
+            .chat-float { bottom: 20px; right: 15px; width: 50px; height: 50px; font-size: 20px; z-index: 1000; }
+            .chat-box { bottom: 80px; right: 10px; width: calc(100% - 20px); height: 70vh; z-index: 1000; }
         }
     </style>
 </head>
 <body>
+    <!-- Botón Hamburguesa (Solo visible en móvil) -->
+    <div class="hamburger-btn" onclick="toggleMenu()">☰</div>
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
     <div class="app-layout">
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar-header"><div class="logo"><span class="logo-icon">⚡</span><span class="logo-text">Voltaic <span class="logo-sub">Almacenes</span></span></div></div>
             <div class="tenant-selector"><div class="tenant-avatar">VA</div><div class="tenant-details"><span class="tenant-name" id="tenantNameDisplay">Desconectado</span><span class="tenant-plan" id="tenantPlanDisplay">Sin sesión</span></div></div>
             <nav class="sidebar-nav">
@@ -329,6 +322,15 @@
             if (sectionId === 'config') document.querySelectorAll('#navConnected .nav-item')[6].classList.add('active'); 
             if (sectionId === 'dashboard') fetchDashboard(); 
             window.scrollTo(0, 0); 
+            // Cerrar menú hamburguesa al cambiar de sección
+            if (window.innerWidth <= 768) {
+                document.getElementById('sidebar').classList.remove('active');
+                document.getElementById('overlay').classList.remove('active');
+            }
+        }
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('active');
         }
         function showToast(message, type = 'success') { const toast = document.getElementById('toast'); toast.textContent = message; toast.className = `toast show ${type}`; setTimeout(() => toast.classList.remove('show'), 3000); }
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
@@ -366,7 +368,7 @@
                 
                 document.getElementById('tenantNameDisplay').textContent = lic.negocio;
                 document.getElementById('tenantPlanDisplay').textContent = lic.tipo_plan.toUpperCase();
-                document.getElementById('navConnected').style.display = 'flex'; // Cambiado a flex para móvil
+                document.getElementById('navConnected').style.display = 'flex';
                 document.getElementById('setupNav').style.display = 'none';
                 document.getElementById('logoutBtn').classList.remove('hidden');
                 
@@ -386,7 +388,7 @@
             document.getElementById('tenantNameDisplay').textContent = 'Desconectado'; 
             document.getElementById('tenantPlanDisplay').textContent = 'Sin sesión'; 
             document.getElementById('navConnected').style.display = 'none'; 
-            document.getElementById('setupNav').style.display = 'flex'; // Cambiado a flex para móvil
+            document.getElementById('setupNav').style.display = 'flex';
             document.getElementById('logoutBtn').classList.add('hidden'); 
             document.getElementById('licenciaInput').value = ''; 
             updateProductsList(); updateOrdersList(); renderCart(); 
@@ -420,7 +422,7 @@
         function renderCart() { const list = document.getElementById('cartList'); if (cart.length === 0) { list.innerHTML = `<div class="empty-state"><p>El ticket está vacío. Escaneé productos arriba.</p></div>`; } else { list.innerHTML = cart.map((item, index) => { const subtotal = item.cantidad * item.precioUnitario; return `<div class="list-item cart-item" id="cart-item-${index}"><div class="cart-item-top"><span><strong>${item.nombre}</strong> (${item.unidad})</span><button class="btn-secondary" style="padding:4px 12px; font-size:12px; width:auto; color: var(--accent-red); border-color: var(--accent-red);" onclick="removeFromCart(${index})">Quitar</button></div><div class="cart-item-bottom"><label>Cant:</label><input type="number" step="0.001" class="cart-input" value="${item.cantidad}" oninput="updateCartItem(${index}, 'cantidad', this.value)"><label>Precio: $</label><input type="number" class="cart-input" value="${item.precioUnitario}" oninput="updateCartItem(${index}, 'precioUnitario', this.value)"><span style="margin-left:auto; color: var(--accent-green); font-weight: bold;" class="cart-subtotal">$${subtotal.toLocaleString('es-CL')}</span></div></div>`; }).join(''); } updateCartTotals(); }
         
         function openCashModal() { if(cart.length === 0) return showToast('Agrega productos al ticket primero', 'error'); let total = 0; cart.forEach(i => total += i.cantidad * i.precioUnitario); document.getElementById('cashTotal').value = total; document.getElementById('cashReceived').value = ''; document.getElementById('cashChange').value = ''; openModal('cashModal'); }
-        function calculateChange() { const total = parseFloat(document.getElementById('cashTotal').value) || 0; const received = parseFloat(document.getElementById('cashReceived').value) || 0; document.getElementById('cashChange').value = received >= total ? `$${(received - total).toLocaleString('es-CL')}` : 'Monto insuficient'; }
+        function calculateChange() { const total = parseFloat(document.getElementById('cashTotal').value) || 0; const received = parseFloat(document.getElementById('cashReceived').value) || 0; document.getElementById('cashChange').value = received >= total ? `$${(received - total).toLocaleString('es-CL')}` : 'Monto insuficiente'; }
         async function confirmCashSale() { const total = parseFloat(document.getElementById('cashTotal').value) || 0; const received = parseFloat(document.getElementById('cashReceived').value) || 0; if(received < total) return showToast('El monto recibido es menor al total', 'error'); closeModal('cashModal'); await checkout('EFECTIVO', null, received); }
 
         async function processTbkPayment() { if(cart.length === 0) return showToast('Agrega productos al ticket primero', 'error'); let total = 0; cart.forEach(i => total += i.cantidad * i.precioUnitario); try { showToast('Esperando respuesta de POS Transbank...', 'success'); const tbkRes = await apiCall('/transbank/pagar', 'POST', { monto: total, tipoTarjeta: 'tbk', cuotas: 0 }); if(!tbkRes.aprobado) return showToast('Transacción rechazada en POS.', 'error'); await checkout('TARJETA', null, tbkRes); } catch(e) { console.error(e); } }
@@ -430,7 +432,7 @@
 
         async function checkout(metodoPago, clienteId, datosPago) { if(cart.length === 0) return; const itemsPayload = cart.map(item => ({ productoId: item.productoId, cantidad: item.cantidad, precioUnitario: item.precioUnitario })); try { const res = await apiCall('/ventas/tickets', 'POST', { items: itemsPayload, metodoPago, clienteId }); let total = 0; cart.forEach(i => total += i.cantidad * i.precioUnitario); const neto = Math.round(total / 1.19); const iva = total - neto; let receiptHtml = `<div style="text-align:center; margin-bottom:10px;"><strong>Voltaic Almacenes</strong><br>Venta: ${res.id.substring(0,8)}<br>${new Date().toLocaleString('es-CL')}</div>`; receiptHtml += `<div style="border-top: 1px dashed var(--border-subtle); border-bottom: 1px dashed var(--border-subtle); padding: 10px 0;">`; cart.forEach(item => { receiptHtml += `<div class="receipt-item"><span>${item.cantidad} ${item.unidad} x ${item.nombre}</span><span>$${(item.cantidad * item.precioUnitario).toLocaleString('es-CL')}</span></div>`; }); receiptHtml += `</div>`; receiptHtml += `<div class="receipt-item" style="border:none; color:var(--text-muted);"><span>Subtotal Neto</span><span>$${neto.toLocaleString('es-CL')}</span></div>`; receiptHtml += `<div class="receipt-item" style="border:none; color:var(--text-muted);"><span>IVA (19%)</span><span>$${iva.toLocaleString('es-CL')}</span></div>`; receiptHtml += `<div class="receipt-total"><span>TOTAL</span><span>$${total.toLocaleString('es-CL')}</span></div>`; receiptHtml += `<div class="receipt-item"><span>Método de Pago</span><span>${metodoPago}</span></div>`; if(metodoPago === 'EFECTIVO') { receiptHtml += `<div class="receipt-item"><span>Recibido</span><span>$${datosPago.toLocaleString('es-CL')}</span></div><div class="receipt-item" style="color: var(--accent-green);"><span>Vuelto</span><span>$${(datosPago - total).toLocaleString('es-CL')}</span></div>`; } if(metodoPago === 'TARJETA') { receiptHtml += `<div class="receipt-item"><span>Código Aut.</span><span>${datosPago.codigoAutorizacion}</span></div><div class="receipt-item"><span>Tarjeta</span><span>****${datosPago.ultimaDigitosTarjeta}</span></div>`; } if(metodoPago === 'FIADO') { const cli = clientes.find(c => c.id === clienteId); receiptHtml += `<div class="receipt-item"><span>Cliente</span><span>${cli ? cli.nombre : 'N/A'}</span></div><div class="receipt-item" style="color: var(--accent-yellow);"><span>Cargado a Deuda</span><span>$${total.toLocaleString('es-CL')}</span></div>`; } document.getElementById('receiptBody').innerHTML = receiptHtml; openModal('receiptModal'); cart = []; renderCart(); await fetchProducts(); fetchDashboard(); fetchClientes(); } catch (error) { console.error('Error en venta', error); } }
         
-        async function createSupplier() { const nombre = document.getElementById('provName').value; const rut = document.getElementById('provRut').value; if(!nombre || !rut) return showToast('Nombre y RUT obligatorios', 'error'); const res = await apiCall('/compras/proveedores', 'POST', { nombre, rut }); const select = document.getElementById('orderSupplier'); select.innerHTML += `<option value="${res.id}">${nombr}</option>`; showToast(`Proveedor guardado`); document.getElementById('provName').value = ''; document.getElementById('provRut').value = ''; }
+        async function createSupplier() { const nombre = document.getElementById('provName').value; const rut = document.getElementById('provRut').value; if(!nombre || !rut) return showToast('Nombre y RUT obligatorios', 'error'); const res = await apiCall('/compras/proveedores', 'POST', { nombre, rut }); const select = document.getElementById('orderSupplier'); select.innerHTML += `<option value="${res.id}">${nombre}</option>`; showToast(`Proveedor guardado`); document.getElementById('provName').value = ''; document.getElementById('provRut').value = ''; }
         function updateOrderProductSelect() { const select = document.getElementById('orderProduct'); select.innerHTML = products.map(p => `<option value="${p.id}">${p.nombre}</option>`).join(''); }
         async function createOrder() { const proveedorId = document.getElementById('orderSupplier').value; const productoId = document.getElementById('orderProduct').value; const cantidad = parseFloat(document.getElementById('orderQty').value); const precioUnitario = parseFloat(document.getElementById('orderPrice').value); if(!proveedorId) return showToast('Crea un proveedor primero', 'error'); if(!productoId) return showToast('Crea un producto primero', 'error'); const res = await apiCall('/compras/ordenes', 'POST', { proveedorId, items: [{ productoId, cantidad, precioUnitario }] }); orders.push({ id: res.id, estado: 'BORRADOR' }); updateOrdersList(); showToast('Orden creada en BORRADOR'); }
         function updateOrdersList() { const list = document.getElementById('ordersList'); if (orders.length === 0) { list.innerHTML = `<div class="empty-state"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path></svg><p>Sin órdenes.</p></div>`; return; } list.innerHTML = orders.map(o => `<div class="list-item" id="order-${o.id}"><span style="font-family:monospace; font-size:12px;">${o.id.substring(0,8)}...</span><span class="badge ${o.estado === 'BORRADOR' ? 'badge-draft' : 'badge-confirmed'}">${o.estado}</span><span>${o.estado === 'BORRADOR' ? `<button class="btn-secondary" style="padding:6px 12px; font-size:12px; width:auto;" onclick="confirmOrder('${o.id}')">Confirmar</button>` : ''}</span></div>`).join(''); }
